@@ -30,7 +30,7 @@ workflow_path: ".bmad/bmm/workflows/workflow-status/paths/method-greenfield.yaml
 
 workflow_status: "
 # Phase 0: Discovery (Optional)
-brainstorm-project: pending  # agent: analyst
+brainstorm-project: docs/brainstorming-session-results-2025-11-13.md  # agent: analyst
 product-brief: pending  # agent: analyst
 
 # Phase 1: Planning

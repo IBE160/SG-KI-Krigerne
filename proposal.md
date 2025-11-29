@@ -75,3 +75,16 @@ The chatbot will draw from a structured **knowledge base** containing official c
 - University course catalogs and Canvas pages.
 - OpenAI / Gemini / RAG (Retrieval-Augmented Generation) examples for Q&A bots.
 - Suggested project proposals from teachers
+
+## 10. Supporting Documents (Brainstorm and research)
+
+## Brainstorming Sessions
+
+- [Brainstorming session - Six thinking hats](docs/brainstorming-session-results-2025-11-13.md)
+
+- [Brainstorming session - Scamper Analysis](docs/SCAMPER_ANALYSIS.md)
+
+## Research Sessions
+
+- [Research - How students find information](docs/research-user-2025-11-13.md)
+

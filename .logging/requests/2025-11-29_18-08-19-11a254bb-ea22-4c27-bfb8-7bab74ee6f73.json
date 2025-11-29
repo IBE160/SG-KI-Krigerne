@@ -1,0 +1,157 @@
+[
+  {
+    "request": {
+      "session.id": "11a254bb-ea22-4c27-bfb8-7bab74ee6f73",
+      "installation.id": "c33bd397-d5e8-4f06-ae64-226f66745f90",
+      "interactive": true,
+      "user.email": "fredrikansnes35@gmail.com",
+      "event.name": "gemini_cli.api_request",
+      "event.timestamp": "2025-11-29T18:08:39.783Z",
+      "model": "gemini-2.5-pro",
+      "prompt_id": "11a254bb-ea22-4c27-bfb8-7bab74ee6f73########0",
+      "request_text": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "This is the Gemini CLI. We are setting up the context for our chat.\nToday's date is Saturday, November 29, 2025 (formatted according to the user's locale).\nMy operating system is: win32\nThe project's temporary directory is: C:\\Users\\fredr\\.gemini\\tmp\\c503916334abd055d44c774443c4be0347ff181f47ca679871aba0fa76255107\nI'm currently working in the directory: C:\\Users\\fredr\\Documents\\KIProject\\SG-KI-Krigerne\nHere is the folder structure of the current working directories:\n\nShowing up to 200 items (files + folders). Folders or files indicated with ... contain more items not shown, were ignored, or the display limit (200 items) was reached.\n\nC:\\Users\\fredr\\Documents\\KIProject\\SG-KI-Krigerne\\\n├───.gitignore\n├───proposal.md\n├───README.md\n├───.bmad\\\n│   ├───_cfg\\\n│   │   ├───agent-manifest.csv\n│   │   ├───files-manifest.csv\n│   │   ├───manifest.yaml\n│   │   ├───task-manifest.csv\n│   │   ├───tool-manifest.csv\n│   │   ├───workflow-manifest.csv\n│   │   ├───agents\\\n│   │   │   ├───bmm-analyst.customize.yaml\n│   │   │   ├───bmm-architect.customize.yaml\n│   │   │   ├───bmm-dev.customize.yaml\n│   │   │   ├───bmm-pm.customize.yaml\n│   │   │   ├───bmm-sm.customize.yaml\n│   │   │   ├───bmm-tea.customize.yaml\n│   │   │   ├───bmm-tech-writer.customize.yaml\n│   │   │   ├───bmm-ux-designer.customize.yaml\n│   │   │   ├───cis-brainstorming-coach.customize.yaml\n│   │   │   ├───cis-creative-problem-solver.customize.yaml\n│   │   │   ├───cis-design-thinking-coach.customize.yaml\n│   │   │   ├───cis-innovation-strategist.customize.yaml\n│   │   │   ├───cis-presentation-master.customize.yaml\n│   │   │   ├───cis-storyteller.customize.yaml\n│   │   │   └───core-bmad-master.customize.yaml\n│   │   └───ides\\\n│   │       └───claude-code.yaml\n│   ├───bmm\\\n│   │   ├───config.yaml\n│   │   ├───README.md\n│   │   ├───agents\\\n│   │   │   ├───analyst.md\n│   │   │   ├───architect.md\n│   │   │   ├───dev.md\n│   │   │   ├───pm.md\n│   │   │   ├───sm.md\n│   │   │   ├───tea.md\n│   │   │   ├───tech-writer.md\n│   │   │   └───ux-designer.md\n│   │   ├───docs\\\n│   │   │   ├───agents-guide.md\n│   │   │   ├───brownfield-guide.md\n│   │   │   ├───enterprise-agentic-development.md\n│   │   │   ├───faq.md\n│   │   │   ├───glossary.md\n│   │   │   ├───party-mode.md\n│   │   │   ├───quick-spec-flow.md\n│   │   │   ├───quick-start.md\n│   │   │   ├───README.md\n│   │   │   ├───scale-adaptive-system.md\n│   │   │   ├───test-architecture.md\n│   │   │   ├───workflow-architecture-reference.md\n│   │   │   ├───workflow-document-project-reference.md\n│   │   │   ├───workflows-analysis.md\n│   │   │   ├───workflows-implementation.md\n│   │   │   ├───workflows-planning.md\n│   │   │   ├───workflows-solutioning.md\n│   │   │   └───images\\\n│   │   │       ├───workflow-method-greenfield.excalidraw\n│   │   │       └───workflow-method-greenfield.svg\n│   │   ├───teams\\\n│   │   │   ├───default-party.csv\n│   │   │   └───team-fullstack.yaml\n│   │   ├───testarch\\\n│   │   │   ├───tea-index.csv\n│   │   │   └───knowledge\\\n│   │   │       ├───ci-burn-in.md\n│   │   │       ├───component-tdd.md\n│   │   │       ├───contract-testing.md\n│   │   │       ├───data-factories.md\n│   │   │       ├───email-auth.md\n│   │   │       ├───error-handling.md\n│   │   │       ├───feature-flags.md\n│   │   │       ├───fixture-architecture.md\n│   │   │       ├───network-first.md\n│   │   │       ├───nfr-criteria.md\n│   │   │       ├───playwright-config.md\n│   │   │       ├───probability-impact.md\n│   │   │       ├───risk-governance.md\n│   │   │       ├───selective-testing.md\n│   │   │       └───selector-resilience.md\n│   │   │       └───...\n│   │   └───workflows\\\n│   │       ├───1-analysis\\\n│   │       ├───2-plan-workflows\\\n│   │       ├───3-solutioning\\\n│   │       ├───4-implementation\\\n│   │       ├───diagrams\\\n│   │       ├───document-project\\\n│   │       ├───techdoc\\\n│   │       ├───testarch\\\n│   │       └───workflow-status\\\n│   ├───cis\\\n│   │   ├───config.yaml\n│   │   ├───README.md\n│   │   ├───agents\\\n│   │   │   ├───brainstorming-coach.md\n│   │   │   ├───creative-problem-solver.md\n│   │   │   ├───design-thinking-coach.md\n│   │   │   ├───innovation-strategist.md\n│   │   │   ├───presentation-master.md\n│   │   │   ├───README.md\n│   │   │   └───storyteller.md\n│   │   ├───teams\\\n│   │   │   ├───creative-squad.yaml\n│   │   │   └───default-party.csv\n│   │   └───workflows\\\n│   │       ├───README.md\n│   │       ├───design-thinking\\\n│   │       ├───innovation-strategy\\\n│   │       ├───problem-solving\\\n│   │       └───storytelling\\\n│   ├───core\\\n│   │   ├───config.yaml\n│   │   ├───agents\\\n│   │   │   ├───bmad-master.md\n│   │   │   └───bmad-web-orchestrator.agent.xml\n│   │   ├───resources\\\n│   │   │   └───excalidraw\\\n│   │   ├───tasks\\\n│   │   │   ├───adv-elicit-methods.csv\n│   │   │   ├───advanced-elicitation-methods.csv\n│   │   │   ├───advanced-elicitation.xml\n│   │   │   ├───index-docs.xml\n│   │   │   ├───validate-workflow.xml\n│   │   │   └───workflow.xml\n│   │   ├───tools\\\n│   │   │   └───shard-doc.xml\n│   │   └───workflows\\\n│   │       ├───brainstorming\\\n│   │       └───party-mode\\\n│   └───docs\\\n│       ├───claude-code-instructions.md\n│       └───gemini-instructions.md\n├───.gemini\\\n│   ├───settings.json\n│   └───commands\\\n│       ├───bmad-agent-bmm-analyst.toml\n│       ├───bmad-agent-bmm-architect.toml\n│       ├───bmad-agent-bmm-dev.toml\n│       ├───bmad-agent-bmm-pm.toml\n│       ├───bmad-agent-bmm-sm.toml\n│       ├───bmad-agent-bmm-tea.toml\n│       ├───bmad-agent-bmm-tech-writer.toml\n│       ├───bmad-agent-bmm-ux-designer.toml\n│       ├───bmad-agent-cis-brainstorming-coach.toml\n│       ├───bmad-agent-cis-creative-problem-solver.toml\n│       ├───bmad-agent-cis-design-thinking-coach.toml\n│       ├───bmad-agent-cis-innovation-strategist.toml\n│       ├───bmad-agent-cis-README.toml\n│       ├───bmad-agent-cis-storyteller.toml\n│       ├───bmad-agent-core-bmad-master.toml\n│       ├───bmad-task-bmm-daily-standup.toml\n│       ├───bmad-task-core-adv-elicit.toml\n│       ├───bmad-task-core-index-docs.toml\n│       ├───bmad-task-core-validate-workflow.toml\n│       ├───bmad-task-core-workflow.toml\n│       └───run-agent-task.toml\n├───.git\\...\n├───.github\\\n│   └───ISSUE_TEMPLATE\\\n├───.logging\\\n│   ├───.gitignore\n│   ├───api-viewer.html\n│   ├───api-viewer.html.bak\n│   ├───process-api-requests.py\n│   ├───README.md\n│   ├───requirements.txt\n│   ├───server.py\n│   ├───server.py.backup\n│   ├───telemetry.md\n│   ├───truncate.py\n│   ├───watcher.py\n│   └───requests\\\n│       ├───2025-11-13_12-08-24-16e861d1-827c-4ecd-981a-c942b1a62891.json\n│       ├───2025-11-13_12-21-59-01632068-cc60-4a4a-99d5-eadf7fa992d4.json\n│       ├───2025-11-29_13-41-03-43a30697-6ca0-4818-9fc8-4ddf53de41f8.json\n│       ├───2025-11-29_14-09-44-8a421584-0d7a-488d-a9dd-8e5a462d19b7.json\n│       ├───2025-11-29_14-39-24-6c784b22-b56b-4270-910d-42139b0b6c15.json\n│       ├───2025-11-29_15-05-00-90e1e58f-269e-49b4-8bc0-3ef3c221994d.json\n│       ├───2025-11-29_15-37-23-9df81173-4880-4608-9188-e2acce3001b5.json\n│       └───2025-11-29_15-43-27-epics.json\n├───.vscode\\\n│   ├───launch.json\n│   ├───settings.json\n│   └───tasks.json\n└───docs\\\n    ├───bmm-workflow-status.yaml\n    ├───brainstorming-session-results-2025-11-13.md\n    ├───epics.md\n    ├───prd.md\n    ├───product-brief.md\n    ├───project-plan.md\n    ├───research-user-2025-11-13.md\n    ├───SCAMPER_ANALYSIS.md\n    ├───images\\\n    │   └───bmad-workflow.svg\n    └───stories\\\n        └───.gitkeep\n\nReminder: Do not return an empty response when a tool call is required.\n\nMy setup is complete. I will provide my first command in the next turn."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "You must fully embody this agent's persona and follow all activation instructions exactly as specified. NEVER break character until given an exit command.\r\n\r\n<agent-activation CRITICAL=\"TRUE\">\r\n1. LOAD the FULL agent file from @.bmad/bmm/agents/pm.md\r\n2. READ its entire contents - this contains the complete agent persona, menu, and instructions\r\n3. Execute ALL activation steps exactly as written in the agent file\r\n4. Follow the agent's persona and menu system precisely\r\n5. Stay in character throughout the session\r\n</agent-activation>\r\n"
+            }
+          ]
+        }
+      ]
+    },
+    "response": {
+      "session.id": "11a254bb-ea22-4c27-bfb8-7bab74ee6f73",
+      "installation.id": "c33bd397-d5e8-4f06-ae64-226f66745f90",
+      "interactive": true,
+      "user.email": "fredrikansnes35@gmail.com",
+      "event.name": "gemini_cli.api_response",
+      "event.timestamp": "2025-11-29T18:09:02.918Z",
+      "model": "gemini-2.5-pro",
+      "duration_ms": 23135,
+      "input_token_count": 19298,
+      "output_token_count": 69,
+      "cached_content_token_count": 3654,
+      "thoughts_token_count": 33,
+      "tool_token_count": 0,
+      "total_token_count": 19400,
+      "prompt_id": "11a254bb-ea22-4c27-bfb8-7bab74ee6f73########0",
+      "auth_type": "oauth-personal",
+      "status_code": 200,
+      "response_text": [
+        {
+          "candidates": [
+            {
+              "content": {
+                "role": "model",
+                "parts": [
+                  {
+                    "thought": true,
+                    "text": "**Defining the Agent's Role**\n\nI'm focusing on the initial stages. My core task is to flawlessly adopt the agent's persona. I will be meticulously loading and absorbing the agent file's specifications, committing to precise execution of all prescribed instructions. I'm prioritizing accuracy in character and procedure.\n\n\n"
+                  }
+                ]
+              }
+            }
+          ],
+          "usageMetadata": {
+            "trafficType": "ON_DEMAND"
+          },
+          "modelVersion": "gemini-2.5-pro",
+          "responseId": "b7f8f2cda77ef33b"
+        },
+        {
+          "candidates": [
+            {
+              "content": {
+                "role": "model",
+                "parts": [
+                  {
+                    "thoughtSignature": "CiIB4/H/XjkDmPPwOz2rouLXVdgsm/PEA3SQso931phHCY23CmsB4/H/XgsR/USs6ruMPN4O4HgEqfG/N2Qej3NXWDR43SKhDgVkg0UiZkWGxdgX0OTSUSIx9KEKhay+Vo1UKkJRlF7J2q7YcIPpJbgMN+XvbMyI0cLdprH/IH6lSAPV88Q7ruvdqssXtzwhyQp5AePx/14NkMEhUZcHT3XL1IK8iRsPlxiBPzsFTeVtD8qv/rbogjd6kXHJWbDxedoggiAzFMzkje1Dh1eB6poEXOUdUcQEzkboJ5SBxMzs+4VP4EF9UUx1hK1Dteq0jHkh8SxguP8XBp4vc3LBpA9+cWRNAuw3YpZMQw==",
+                    "text": "I have reviewed the project manager persona and am ready to assist.\n\n**Current Project:** Homepage Redesign\n**Status:** Planning Phase\n\nHow can I help you?\n\n---"
+                  }
+                ]
+              }
+            }
+          ],
+          "usageMetadata": {
+            "trafficType": "ON_DEMAND"
+          },
+          "modelVersion": "gemini-2.5-pro",
+          "responseId": "b7f8f2cda77ef33b"
+        },
+        {
+          "candidates": [
+            {
+              "content": {
+                "role": "model",
+                "parts": [
+                  {
+                    "text": "\n**Menu**\n1. Show project status\n2. Update task status\n3. Add a new task\n4. View project plan\n5. Discuss"
+                  }
+                ]
+              }
+            }
+          ],
+          "usageMetadata": {
+            "trafficType": "ON_DEMAND"
+          },
+          "modelVersion": "gemini-2.5-pro",
+          "responseId": "b7f8f2cda77ef33b"
+        },
+        {
+          "candidates": [
+            {
+              "content": {
+                "role": "model",
+                "parts": [
+                  {
+                    "text": " risks"
+                  }
+                ]
+              },
+              "finishReason": "STOP"
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 19298,
+            "candidatesTokenCount": 69,
+            "totalTokenCount": 19400,
+            "cachedContentTokenCount": 3654,
+            "trafficType": "ON_DEMAND",
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 19298
+              }
+            ],
+            "cacheTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 3654
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 69
+              }
+            ],
+            "thoughtsTokenCount": 33
+          },
+          "modelVersion": "gemini-2.5-pro",
+          "responseId": "b7f8f2cda77ef33b"
+        }
+      ],
+      "http.status_code": 200
+    },
+    "error": null
+  }
+]

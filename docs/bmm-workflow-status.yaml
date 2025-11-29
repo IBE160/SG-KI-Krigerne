@@ -35,7 +35,7 @@ research: docs/research-user-2025-11-13.md  # agent: analyst
 product-brief: docs/product-brief-ibe160  # agent: analyst
 
 # Phase 1: Planning
-prd: pending  # agent: pm
+prd: docs/prd.md  # agent: pm
 validate-prd: optional  # agent: pm
 create-design: conditional  # agent: ux-designer
 

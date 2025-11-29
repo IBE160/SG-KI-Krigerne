@@ -2,8 +2,8 @@
 
 **Author:** BIP
 **Date:** 2025-11-29
-**Project Level:** {{project_level}}
-**Target Scale:** {{target_scale}}
+**Project Level:** medium
+**Target Scale:** single-organization
 
 ---
 
@@ -89,7 +89,7 @@ This map shows which Functional Requirements (FRs) are addressed by each epic.
 
 **Goal:** Establish the essential technical foundation, a structured knowledge base, and a working, responsive chat UI. This delivers the visible application and the backend structure needed for all future functionality.
 
-### Story 1.1: Project Initialization & CI/CD Pipeline Setup
+### Story 1.1: Project Initialization & CI/CD Pipeline Setup (MVP)
 
 As a **Developer**,
 I want **a standardized project structure and an automated CI/CD pipeline**,
@@ -97,18 +97,18 @@ So that **I can ensure consistent development practices and reliable deployments
 
 **Acceptance Criteria:**
 
-- **Given** a new project is needed,
-- **When** the initialization script is run,
-- **Then** a standard folder structure (e.g., `src`, `docs`, `tests`) is created.
-- **And** a `package.json` (or equivalent) with core dependencies (e.g., a web framework, test runner) is created.
-- **And** a basic "Hello World" version of the app can be run locally.
-- **And** a CI/CD pipeline (e.g., GitHub Actions) is configured to automatically run linters and basic tests on every push.
+1.  **Given** a new project is needed,
+2.  **When** the initialization script is run,
+3.  **Then** a standard folder structure (e.g., `src`, `docs`, `tests`) is created.
+4.  **And** a `package.json` (or equivalent) with core dependencies (e.g., a web framework, test runner) is created.
+5.  **And** a basic "Hello World" version of the app can be run locally.
+6.  **And** a CI/CD pipeline (e.g., GitHub Actions) is configured to automatically run linters and basic tests on every push.
 
 **Prerequisites:** None
 
 **Technical Notes:** Use Vite for the React frontend and Vitest for testing. Set up basic linting with ESLint. The CI/CD pipeline should use GitHub Actions.
 
-### Story 1.2: Design and Implement the Knowledge Base Schema
+### Story 1.2: Design and Implement the Knowledge Base Schema (MVP)
 
 As a **System**,
 I want **a well-defined and structured knowledge base schema**,
@@ -116,18 +116,19 @@ So that **course information can be stored accurately and retrieved efficiently*
 
 **Acceptance Criteria:**
 
-- **Given** course data needs to be stored,
-- **When** the knowledge base is created,
-- **Then** a JSON file (`knowledge_base.json`) is created with a clear schema.
-- **And** the schema supports fields for `course_code`, `learning_outcomes`, `exam_format`, and `mandatory_assignments`.
-- **And** the system can programmatically load and parse this JSON file without errors.
-- **And** an initial dummy course is added to the file for testing purposes.
+1.  **Given** course data needs to be stored,
+2.  **When** the knowledge base is created,
+3.  **Then** a JSON file (`knowledge_base.json`) is created with a clear schema.
+4.  **And** the schema supports fields for `course_code`, `learning_outcomes`, `exam_format`, and `mandatory_assignments`.
+5.  **And** the system can programmatically load and parse this JSON file without errors.
+6.  **And** an initial dummy course is added to the file for testing purposes.
+7.  **And** file permissions are set to prevent unauthorized modification of the knowledge base.
 
 **Prerequisites:** Story 1.1
 
-**Technical Notes:** This fulfills FR12 (structured KB) and supports FR9 (answers from KB). The manual update process for the MVP (FR11) will involve editing this JSON file directly.
+**Technical Notes:** This fulfills FR12 (structured KB), supports FR9 (answers from KB), and covers the manual update process for FR11. Covers: FR9, FR11, FR12.
 
-### Story 1.3: Build the Basic Chat Interface UI
+### Story 1.3: Build the Basic Chat Interface UI (MVP)
 
 As a **User**,
 I want **a simple and clean web interface**,
@@ -135,17 +136,18 @@ So that **I can easily interact with the chatbot**.
 
 **Acceptance Criteria:**
 
-- **Given** the user opens the web app,
-- **When** the page loads,
-- **Then** a chat window is displayed.
-- **And** the chat window contains a message history area (initially with a welcome message) and a text input field with a "Send" button.
-- **And** the interface is responsive, rendering correctly on both desktop (e.g., 1920px width) and mobile (e.g., 375px width) screen sizes.
+1.  **Given** the user opens the web app,
+2.  **When** the page loads,
+3.  **Then** a chat window is displayed.
+4.  **And** the chat window contains a message history area (initially with a welcome message) and a text input field with a "Send" button.
+5.  **And** the interface is responsive, rendering correctly on both desktop (e.g., 1920px width) and mobile (e.g., 375px width) screen sizes.
+6.  **And** the interface meets Web Content Accessibility Guidelines (WCAG) 2.1 Level AA standards.
 
 **Prerequisites:** Story 1.1
 
-**Technical Notes:** Implements FR13 (web interface), FR14 (responsive), and the visual shell for FR2 (conversational interface). Use basic HTML/CSS and a lightweight React component library.
+**Technical Notes:** Use basic HTML/CSS and a lightweight React component library. Covers: FR2, FR13, FR14.
 
-### Story 1.4: Implement Real-Time Message Handling in the UI
+### Story 1.4: Implement Real-Time Message Handling in the UI (MVP)
 
 As a **User**,
 I want **my messages to appear instantly in the chat window and receive a response**,
@@ -153,16 +155,16 @@ So that **the conversation feels fluid and real-time**.
 
 **Acceptance Criteria:**
 
-- **Given** the user has typed a message,
-- **When** they click "Send" or press Enter,
-- **Then** their message immediately appears in the message history area.
-- **And** the input field is cleared.
-- **And** the system will immediately respond with a hardcoded "echo" of the user's message.
-- **And** the "echo" response also appears in the message history.
+1.  **Given** the user has typed a message,
+2.  **When** they click "Send" or press Enter,
+3.  **Then** their message immediately appears in the message history area.
+4.  **And** the input field is cleared.
+5.  **And** the system will immediately respond with a hardcoded "echo" of the user's message.
+6.  **And** the "echo" response also appears in the message history.
 
 **Prerequisites:** Story 1.3
 
-**Technical Notes:** This covers FR4 (real-time message delivery). This simulates the real-time feel before the actual AI backend is connected. Implement using React state management for message list and input handling.
+**Technical Notes:** This simulates the real-time feel before the actual AI backend is connected. Implement using React state management. Covers: FR4.
 
 ---
 
@@ -207,7 +209,7 @@ So that **the conversation feels fluid and real-time**.
 
 **Goal:** Enable students to get instant, accurate answers to their most common course-related questions. This delivers the core value proposition of the MVP.
 
-### Story 2.1: Implement Natural Language Query Input
+### Story 2.1: Implement Natural Language Query Input (MVP)
 
 As a **User**,
 I want **to ask questions about course information in natural language**,
@@ -215,16 +217,16 @@ So that **I can find information without needing to know specific commands or ke
 
 **Acceptance Criteria:**
 
-- **Given** the user has entered a question (e.g., "what is the exam format for TDT4140?"),
-- **When** they send the message,
-- **Then** the system backend receives the raw text of the question.
-- **And** the backend identifies the user's core intent (e.g., `get_exam_format`) and the key entity (e.g., `course_code: TDT4140`).
+1.  **Given** the user has entered a question (e.g., "what is the exam format for TDT4140?"),
+2.  **When** they send the message,
+3.  **Then** the system backend receives the raw text of the question.
+4.  **And** the backend identifies the user's core intent (e.g., `get_exam_format`) and the key entity (e.g., `course_code: TDT4140`).
 
 **Prerequisites:** Story 1.4
 
-**Technical Notes:** This is the entry point for the RAG pipeline. The initial implementation can use simple keyword matching or regex to determine intent and entities. This covers FR1.
+**Technical Notes:** This is the entry point for the RAG pipeline. The initial implementation can use simple keyword matching or regex to determine intent and entities. Covers: FR1.
 
-### Story 2.2: Implement Knowledge Base Retrieval
+### Story 2.2: Implement Knowledge Base Retrieval (MVP)
 
 As a **System**,
 I want **to retrieve relevant information from the knowledge base based on the user's query**,
@@ -232,17 +234,17 @@ So that **I can provide accurate, grounded answers**.
 
 **Acceptance Criteria:**
 
-- **Given** a parsed intent (e.g., `get_exam_format`) and entity (e.g., `course_code: TDT4140`),
-- **When** the retrieval component is invoked,
-- **Then** it searches the `knowledge_base.json` for the matching course.
-- **And** it extracts the specific information requested (e.g., the value of the `exam_format` field for `TDT4140`).
-- **And** if no matching course or information is found, it returns a "not found" signal.
+1.  **Given** a parsed intent (e.g., `get_exam_format`) and entity (e.g., `course_code: TDT4140`),
+2.  **When** the retrieval component is invoked,
+3.  **Then** it searches the `knowledge_base.json` for the matching course.
+4.  **And** it extracts the specific information requested (e.g., the value of the `exam_format` field for `TDT4140`).
+5.  **And** if no matching course or information is found, it returns a "not found" signal.
 
 **Prerequisites:** Story 1.2, Story 2.1
 
-**Technical Notes:** This component is the "Retriever" in the RAG architecture. It directly addresses FR6, FR7, and FR8 by being able to get the data.
+**Technical Notes:** This component is the "Retriever" in the RAG architecture. Covers: FR6, FR7, FR8.
 
-### Story 2.3: Generate Conversational Responses
+### Story 2.3: Generate Conversational Responses (MVP)
 
 As a **User**,
 I want **to receive answers in a clear and conversational format**,
@@ -250,17 +252,17 @@ So that **the information is easy to understand**.
 
 **Acceptance Criteria:**
 
-- **Given** the system has retrieved a piece of information (e.g., "4-hour written exam"),
-- **When** the generation component is invoked,
-- **Then** it formats this information into a natural language sentence (e.g., "The exam format for TDT4140 is a 4-hour written exam.").
-- **And** the generated response is sent back to the UI.
-- **And** the response appears in the chat history for the user.
+1.  **Given** the system has retrieved a piece of information (e.g., "4-hour written exam"),
+2.  **When** the generation component is invoked,
+3.  **Then** it formats this information into a natural language sentence (e.g., "The exam format for TDT4140 is a 4-hour written exam.").
+4.  **And** the generated response is sent back to the UI within 2 seconds.
+5.  **And** the response appears in the chat history for the user.
 
 **Prerequisites:** Story 2.2
 
-**Technical Notes:** This is the "Generator" in the RAG architecture. It fulfills FR3. For the MVP, this can be a set of simple response templates.
+**Technical Notes:** This is the "Generator" in the RAG architecture. Covers: FR3.
 
-### Story 2.4: Handle "I Don't Know" Scenarios
+### Story 2.4: Handle "I Don't Know" Scenarios (MVP)
 
 As a **User**,
 I want **the chatbot to tell me when it doesn't know the answer**,
@@ -268,14 +270,14 @@ So that **I am not misled and know I need to look elsewhere**.
 
 **Acceptance Criteria:**
 
-- **Given** the retrieval component returned a "not found" signal,
-- **When** the generation component is invoked,
-- **Then** it creates a polite and clear "I don't know" response (e.g., "I'm sorry, I couldn't find the information for that course. You may want to check the official course page.").
-- **And** the "I don't know" response is displayed to the user in the chat window.
+1.  **Given** the retrieval component returned a "not found" signal,
+2.  **When** the generation component is invoked,
+3.  **Then** it creates a polite and clear "I don't know" response (e.g., "I'm sorry, I couldn't find the information for that course. You may want to check the official course page.").
+4.  **And** the "I don't know" response is displayed to the user in the chat window.
 
 **Prerequisites:** Story 2.2
 
-**Technical Notes:** This directly implements FR10 and is a critical part of building user trust.
+**Technical Notes:** This is a critical part of building user trust and AI safety. Covers: FR10.
 
 ---
 
@@ -320,7 +322,7 @@ So that **I am not misled and know I need to look elsewhere**.
 
 **Goal:** Allow users to help improve the system's accuracy over time, making the chatbot more reliable and trustworthy.
 
-### Story 3.1: Implement User Feedback Mechanism in UI
+### Story 3.1: Implement User Feedback Mechanism in UI (MVP)
 
 As a **User**,
 I want **to easily provide feedback on the chatbot's answers**,
@@ -328,17 +330,17 @@ So that **the system can be improved**.
 
 **Acceptance Criteria:**
 
-- **Given** a chatbot response is displayed,
-- **When** the response is rendered,
-- **Then** "thumbs up" (👍) and "thumbs down" (👎) icons are displayed next to the response.
-- **And** clicking either icon sends a feedback signal to the backend.
-- **And** after providing feedback, the icons change state (e.g., become greyed out or show a "Thank you" message) to indicate feedback was received.
+1.  **Given** a chatbot response is displayed,
+2.  **When** the response is rendered,
+3.  **Then** "thumbs up" (👍) and "thumbs down" (👎) icons are displayed next to the response.
+4.  **And** clicking either icon sends a feedback signal to the backend.
+5.  **And** after providing feedback, the icons change state (e.g., become greyed out or show a "Thank you" message) to indicate feedback was received.
 
 **Prerequisites:** Story 1.3, Story 2.3
 
-**Technical Notes:** This implements the UI part of FR5.
+**Technical Notes:** This implements the UI part of the feedback loop. Covers: FR5.
 
-### Story 3.2: Persist User Feedback
+### Story 3.2: Persist User Feedback (MVP)
 
 As a **System**,
 I want **to store user feedback**,
@@ -346,14 +348,14 @@ So that **it can be analyzed to improve the chatbot's performance**.
 
 **Acceptance Criteria:**
 
-- **Given** a feedback signal (thumbs up/down) is received from the UI,
-- **When** the backend processes the signal,
-- **Then** it records the feedback along with the user's query, the chatbot's response, and a timestamp into a persistent log (e.g., a simple JSON file or database entry).
-- **And** the system logs do not contain any personally identifiable information (PII) from the user.
+1.  **Given** a feedback signal (thumbs up/down) is received from the UI,
+2.  **When** the backend processes the signal,
+3.  **Then** it records the feedback along with the user's query, the chatbot's response, and a timestamp into a persistent log (e.g., a simple JSON file or database entry).
+4.  **And** the system logs do not contain any personally identifiable information (PII) from the user.
 
 **Prerequisites:** Story 3.1
 
-**Technical Notes:** This implements the backend persistence for FR5.
+**Technical Notes:** This implements the backend persistence for the feedback loop. Covers: FR5.
 
 ---
 

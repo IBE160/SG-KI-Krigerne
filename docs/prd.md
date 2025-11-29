@@ -26,7 +26,7 @@ The project is classified as an EdTech web application focused on providing a ce
 
 ---
 
-
+## Success Criteria
 
 The success of the Himolde Study Friend chatbot will be measured by a combination of functional accuracy, user engagement, and operational efficiency improvements:
 *   **Accuracy of Responses:** The chatbot must correctly answer at least 80% of a fixed set of test questions about known courses. This will be a primary metric for evaluating the effectiveness of the RAG architecture and knowledge base.
@@ -71,6 +71,36 @@ Long-term strategic features envisioning the full potential of the Himolde Study
 *   "Teacher Mode": A dedicated interface for administrative staff and teachers to verify information, manage knowledge base content, and gain insights into common student queries.
 *   Proactive Information Delivery: The chatbot could proactively offer relevant information based on a student's current academic context (e.g., suggesting resources for an upcoming exam).
 
+---
+
+## Out of Scope
+
+To maintain focus and ensure timely delivery of the Minimum Viable Product, the following functionalities are explicitly excluded from the initial scope:
+*   **Integration with Official University APIs/Live Systems:** Direct integration with complex university systems (e.g., student information systems, Canvas APIs) will be deferred to future phases. The MVP will rely on a manually or semi-automatically curated knowledge base.
+*   **User Authentication or Personalized Dashboards:** Features requiring user login, personalized profiles, or custom dashboards are beyond the MVP's scope. The initial focus is on anonymous, broad access to information.
+*   **Support for Multiple Languages:** The MVP will operate in a single language (English) to simplify development and testing. Multi-language support will be considered in subsequent phases.
+*   **Advanced Conversational Features:** While the long-term vision includes more sophisticated interactions, the MVP will prioritize accurate Q&A over complex multi-turn dialogues or proactive assistance.
+
+---
+
+## Epics Summary
+
+The project is broken down into three core epics, designed to deliver incremental value. We start with a foundational epic to establish the application, followed by the core question-answering functionality, and finally, a feedback loop for continuous improvement. This approach ensures that a visible, functional product is established early, with the most critical user value delivered in the second stage.
+
+*   **Epic 1: Foundation & Core Chat Interface**
+    *   **Value:** Establishes the essential technical foundation, a structured knowledge base, and a working, responsive chat UI. This delivers the visible application and the backend structure needed for all future functionality.
+    *   **Sequencing:** This must be the first epic as it sets up the entire project infrastructure.
+
+*   **Epic 2: Core Question Answering**
+    *   **Value:** Enables students to get instant, accurate answers to their most common course-related questions. This delivers the core value proposition of the MVP.
+    *   **Sequencing:** Depends on the Foundation epic to provide the UI and knowledge base structure.
+
+*   **Epic 3: User Feedback Loop**
+    *   **Value:** Allows users to help improve the system's accuracy over time, making the chatbot more reliable and trustworthy.
+    *   **Sequencing:** Depends on the Question Answering epic, as feedback can only be given on an existing answer.
+
+---
+
 ## Innovation & Novel Patterns
 
 The Himolde Study Friend introduces innovation through its AI-powered chatbot leveraging a Retrieval-Augmented Generation (RAG) architecture for accurate, natural language interaction with university course information. This represents a "New interaction" pattern in educational information access, moving beyond fragmented static resources to a dynamic, conversational interface. The modular RAG architecture itself is an innovative technical choice for grounding LLM responses and reducing hallucinations in a critical educational context. The project also lays the groundwork for future advanced features like personalized study assistance, indicating a "New paradigm" for student support.
@@ -86,195 +116,38 @@ The validation approach for the Himolde Study Friend chatbot primarily focuses o
 
 ---
 
-
-
 ## Web App Specific Requirements
-
-
-
-
-
-
 
 The Himolde Study Friend will be a Single Page Application (SPA) designed for a modern, fluid user experience. It will officially support Google Chrome, with a goal of supporting all Chromium-based browsers. Search Engine Optimization (SEO) is not a requirement for this application. Real-time message delivery is a core requirement to ensure a conversational and interactive experience, but complex multi-user live synchronization is not in scope. The application will adhere to Web Content Accessibility Guidelines (WCAG) 2.1 Level AA to ensure it is accessible to a wide range of users.
 
-
-
-
-
-
-
 ### Platform Support
-
-
-
-
-
-
 
 The application will be a web-based SPA. Official support is for Google Chrome, with a goal of supporting all Chromium-based browsers. The application should be responsive and work well on both desktop and mobile browsers.
 
-
-
-
-
-
-
 ## User Experience Principles
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 The UX principles for the Himolde Study Friend chatbot will center around creating an intuitive, efficient, and positive experience for university students. The vibe should be professional, trustworthy, and helpful, minimizing cognitive load and frustration. Key principles include:
 
-
-
-
-
-
-
 *   **Clarity and Conciseness**: Information presented clearly, directly, and without jargon.
-
-
-
-
-
-
-
 *   **Responsiveness**: The interface should be quick to respond to user input, especially for message delivery.
-
-
-
-
-
-
-
 *   **Conversational Simplicity**: Interaction should mimic natural conversation, making it easy for students to ask questions.
-
-
-
-
-
-
-
 *   **Consistency**: Consistent design elements and interaction patterns across the interface.
-
-
-
-
-
-
-
 *   **Accessibility**: Adherence to WCAG 2.1 AA standards for inclusive design.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ### Key Interactions
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 The key interactions will revolve around the conversational interface:
 
-
-
-
-
-
-
 *   **Natural Language Query Input**: Students type or speak their questions.
-
-
-
-
-
-
-
 *   **Chatbot Response Display**: Clear, formatted display of the chatbot's answers, potentially with follow-up questions or related links.
-
-
-
-
-
-
-
 *   **Contextual Help/Suggestions**: Subtle hints or suggestions for common questions or how to phrase queries effectively.
-
-
-
-
-
-
-
 *   **Feedback Mechanism**: Simple ways for users to indicate if an answer was helpful or not.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ---
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Functional Requirements
 
-The following functional requirements (FRs) define the capabilities of the Himolde Study Friend chatbot.
+The following functional requirements (FRs) define the capabilities of the Himolde Study Friend chatbot. All listed Functional Requirements are considered part of the Minimum Viable Product (MVP) scope. Critical dependencies between FRs are primarily managed at the epic and story breakdown level in `epics.md`.
 
 ### User Interaction & Conversation
 *   **FR1:** The user can ask questions about course information in natural language.
@@ -302,56 +175,30 @@ The following functional requirements (FRs) define the capabilities of the Himol
 
 ## Non-Functional Requirements
 
-
-
 ### Performance
 
-
-
 *   **Response Time:** Chatbot responses for known queries should be delivered within 1-2 seconds to ensure a fluid conversational experience.
-
 *   **System Responsiveness:** The web interface should remain highly responsive during user interaction, even under moderate load.
-
-
 
 ### Security
 
-
-
 *   **Data Privacy:** All user interactions and data handling shall comply with relevant data privacy regulations (e.g., GDPR, local university policies).
-
 *   **Knowledge Base Integrity:** Mechanisms shall be in place to prevent unauthorized modification or access to the structured knowledge base.
-
 *   **AI Safety:** Measures shall be implemented to mitigate risks of prompt injection and ensure AI safety, preventing the generation of harmful or inappropriate content.
-
-
 
 ### Scalability
 
-
-
 *   **User Load:** The system shall be capable of supporting a growing number of concurrent student users without significant degradation in performance.
-
 *   **Knowledge Base Expansion:** The architecture shall support easy expansion of the knowledge base to include more courses and information types.
-
-
 
 ### Accessibility
 
-
-
 *   **WCAG Compliance:** The web interface shall conform to Web Content Accessibility Guidelines (WCAG) 2.1 Level AA standards.
-
 *   **Usability for Assistive Technologies:** The interface should be compatible with common assistive technologies (e.g., screen readers, keyboard navigation).
-
-
 
 ### Integration
 
-
-
 *   **API Readiness:** The system architecture shall be designed to facilitate future integration with official university APIs (e.g., student information systems, Canvas APIs).
-
 *   **Data Import/Export:** The system shall support mechanisms for efficient import and export of knowledge base data.
 
 ---
@@ -361,3 +208,14 @@ _This PRD captures the essence of ibe160 - The Product Requirements Document for
 _The Himolde Study Friend delivers significant value by solving student frustration due to fragmented course information, saving time for both students and university staff, ensuring information accuracy, and modernizing the university's digital student support services. Its core value proposition lies in providing instant, accurate, and easily accessible answers to common course-related queries via a natural language interface._
 
 _Created through collaborative discovery between BIP and AI facilitator._
+
+---
+
+## References
+
+The development of this Product Requirements Document has been informed by the following supporting documents and research:
+
+*   **Product Brief: Himolde Study Friend (`product-brief.md`):** The foundational document outlining the initial problem, solution, users, and scope.
+*   **Brainstorming Session Results (`brainstorming-session-results-2025-11-13.md`):** Detailed outputs from brainstorming sessions utilizing techniques like Six Thinking Hats and Question Storming, providing insights into user problems, benefits, risks, and potential solutions.
+*   **SCAMPER Analysis (`SCAMPER_ANALYSIS.md`):** A brainstorming document that applied the SCAMPER technique to explore innovative ideas, potential improvements, and alternative approaches for the Himolde Study Friend.
+*   **Research Report: How University Students Search for Course Information (`research-user-2025-11-13.md`):** User research findings detailing student search behaviors, frustrations, and critical insights into the fragmented information landscape.

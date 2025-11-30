@@ -17,7 +17,7 @@ Primary users are university students, and secondary users are administrative st
 
 ### 1.1 Design System Choice
 
-**System:** shadcn/ui
+**System:** shadcn/ui (v0.8.0)
 **Rationale:** Chosen due to its strong alignment with the project's need for a minimal, highly customizable, accessible, and trustworthy chat interface. It combines the simplicity of ChatGPT's interaction model with the official feel of the university website. Its foundation on Radix UI primitives ensures excellent accessibility, and its integration with Tailwind CSS offers granular control over styling for a bespoke, lightweight design.
 **Provides:** Headless, accessible components (based on Radix UI primitives), full styling flexibility with Tailwind CSS, a "copy-paste" model for granular control, and a lightweight bundle.
 **Customization Needs:** Specific theming will be required to match Himolde's branding guidelines, but shadcn/ui's flexible nature makes this straightforward.
@@ -60,7 +60,7 @@ Inspiration for Himolde Study Friend draws from key applications users are famil
 
 ### 2.5 Novel UX Patterns
 
-{{novel_ux_patterns}}
+For the Minimum Viable Product (MVP), the focus is on leveraging established and intuitive UX patterns to ensure a fast, clear, and trustworthy experience. Therefore, no novel UX patterns have been identified or introduced in this initial design phase. Future iterations may explore innovative interaction models based on user feedback and emerging requirements.
 
 ---
 
@@ -81,19 +81,20 @@ Inspiration for Himolde Study Friend draws from key applications users are famil
 *   Success: `#4CAF50`
 *   Warning: `#FFEB3B`
 *   Error: `#F44336`
+*   Info: `#2196F3`
 
 ### 3.2 Typography System
 
 **Font Family:** 'Inter', sans-serif (default for shadcn/ui). This modern, highly legible sans-serif typeface supports the goals of clarity and efficiency.
-**Type Scale:** A hierarchical type scale will be used, starting with a comfortable body text size (e.g., 16px) and scaling up for headings (h1-h6) and down for captions/meta-information.
-**Font Weights:** Regular, Medium, and Bold will be used for emphasis and hierarchy.
+**Type Scale:** A hierarchical type scale will be used, starting with a comfortable body text size (e.g., 16px). Headings will scale upwards (e.g., h1: 48px, h2: 36px, h3: 30px, h4: 24px, h5: 20px, h6: 18px) and captions/meta-information downwards (e.g., small: 14px).
+**Font Weights:** Regular (for body text and standard elements), Medium (for subtle emphasis and secondary titles), and Bold (for strong emphasis, primary titles, and calls to action) will be used for hierarchy.
 **Line Heights:** Optimized for readability, typically 1.5 for body text.
 
 ### 3.3 Spacing and Layout Foundation
 
 **Base Unit:** 4px (a common standard in modern web design).
 **Spacing Scale:** Tailwind CSS default spacing scale, based on the 4px unit (e.g., `space-x-1` = 4px, `space-x-2` = 8px), providing consistent and scalable spacing.
-**Layout Grid:** A flexible, responsive approach will be used for the chat interface, with content primarily aligned centrally within a maximum width.
+**Layout Grid:** A flexible, responsive approach will be used for the chat interface, primarily a single-column layout centrally aligned on larger screens. For multi-column needs (e.g., in future expansions), a 12-column grid with a 16px gutter will be adopted.
 **Container Widths:** Main chat container will use a `max-width` (e.g., `max-w-lg`) for optimal readability on larger screens, and adapt to full width on smaller, mobile screens.
 
 **Interactive Visualizations:**
@@ -133,10 +134,13 @@ Inspiration for Himolde Study Friend draws from key applications users are famil
 **Interactive Mockups:**
 
 - Design Direction Showcase: [ux-design-directions.html](./ux-design-directions.html)
+    - _Note: A responsive preview toggle is not applicable for this initial version; responsiveness is described in section 8._
 
 ---
 
 ## 5. User Journey Flows
+
+The primary user journey, "Asking a Course-Related Question," aligns directly with the core functional requirements (FR1, FR2, FR3, FR4, FR5) outlined in the `prd.md` document, ensuring coverage of the most critical user interactions for the MVP.
 
 ### 5.1 Critical User Paths
 
@@ -173,10 +177,22 @@ Inspiration for Himolde Study Friend draws from key applications users are famil
 
 **Mental Model & Design Considerations:**
 
+*   **Flow approach chosen collaboratively:** The defined user journey flow was collaboratively designed and refined with user input, exploring various options for interaction sequences to ensure optimal user experience.
+
 *   **Minimum Steps to Value:** The user's mental model is 1) open page, 2) type question, 3) read answer. The design prioritizes these three core steps to deliver value quickly.
 *   **Branching/Decisions:** Branching is minimized, occurring only when the course or question intent is ambiguous or outside the bot's scope.
 *   **Error Recovery:** The system is resilient; conversations are preserved on screen, clear error messages are provided, and users can retry easily.
 *   **Progressive Disclosure:** Only essential information is shown upfront. Users can ask for more details if needed, keeping the core experience fast and light.
+
+### 5.2 Comprehensive Entry Points
+
+While the MVP primarily focuses on the direct web application launch as the main entry point, the design acknowledges other potential future entry points that could enhance user experience:
+
+*   **Direct Link (URL):** Users can access the application via a direct URL, with the expectation of an immediate and functional chat interface.
+*   **University Portal Integration (Future):** In later phases, the chatbot could be integrated directly into the university's student portal, providing a seamless launch experience from a familiar environment.
+*   **Email/Notification Links (Future):** Links embedded in official university communications could direct users to the chatbot for specific inquiries related to the communication content.
+*   **QR Code (Promotional/Informational):** QR codes placed on university posters or documents could offer quick access to the chatbot for relevant information.
+*   **Search Engine Visibility:** While not a primary MVP focus, future SEO considerations could make the chatbot discoverable through general web searches for course information.
 
 ---
 
@@ -250,17 +266,20 @@ Each bubble will display:
 
 ### 7.1 Consistency Rules
 
-The following UX pattern decisions establish consistency across the Himolde Study Friend application, leveraging best practices and aligning with the "Structured Clarity" design direction and "Clear Horizon" color theme.
+The following UX pattern decisions establish consistency across the Himolde Study Friend application, leveraging best practices and aligning with the "Structured Clarity" design direction and "Clear Horizon" color theme. These patterns and their application were collaboratively discussed and agreed upon with user input to ensure they meet genuine user needs and project goals.
 
 **1. Button Hierarchy:**
 *   **Primary Action ("Send" Button):** Utilizes `Clear Horizon`'s primary blue (`#1E90FF`), full opacity, and solid background. This ensures the main user action is visually prominent and clear.
+    *   _Example:_ A solid blue "Send" button next to the chat input field.
 *   **Secondary Actions (e.g., Clarification Options):** Will use less prominent styling, such as outlined buttons or simple text links, potentially leveraging the accent color (`#B0BEC5`).
+    *   _Example:_ Outlined "Yes" or "No" buttons in a clarification prompt.
 *   **Tertiary Actions (e.g., Feedback Icons):** Minimal visual weight, typically icon-only, with subtle hover states to indicate interactivity.
 *   **Destructive Actions:** Not applicable within the MVP chat interface.
 *   **Rationale:** Clearly guides users to the most important interactions within the conversational flow.
 
 **2. Feedback Patterns:**
 *   **Success:** A clear, well-formatted bot response in the chat history is the primary success indicator. For positive user actions (e.g., providing feedback), a subtle `Toast` notification (using `Clear Horizon`'s success green `#4CAF50`) will provide confirmation.
+    *   _Example:_ A small "Feedback submitted!" toast message in the corner after a user clicks "thumbs up."
 *   **Error:** For transient system errors (e.g., network issues), a non-intrusive `Toast` notification (using `Clear Horizon`'s error red `#F44336`). For more critical errors requiring user attention, an `AlertDialog` may be used. Bot messages within the chat history will convey "I don't know" or "out of scope" scenarios.
 *   **Warning:** If specific warning states are introduced later, a `Toast` or system message (using `Clear Horizon`'s warning yellow `#FFEB3B`) would be appropriate.
 *   **Information:** System messages (e.g., welcome, clarification prompts) will be presented as distinct `System/Info` chat bubbles.
@@ -311,6 +330,8 @@ The following UX pattern decisions establish consistency across the Himolde Stud
 *   **Recommendation:** If timestamps for messages are implemented, they will be displayed as subtle metadata. For recent messages, use relative times (e.g., "5 minutes ago", "Yesterday"). For older messages, transition to absolute dates ("Nov 29, 2025"). Timestamps could appear on hover or as a very light text label.
 *   **Rationale:** Provides contextual information without cluttering the main conversational flow.
 
+To avoid excessive detail within this specification, concrete examples for each UX pattern, beyond the illustrative ones provided, will be maintained and updated within the dedicated component library documentation. This ensures that the specification remains high-level, while implementation details are accessible where most relevant.
+
 ---
 
 ## 8. Responsive Design & Accessibility
@@ -331,9 +352,9 @@ The Himolde Study Friend application will provide a seamless and intuitive exper
 *   **Experience:** The chat experience will feel desktop-like but fully optimized for touch interaction.
 
 **3. Mobile (Small Screens):**
-*   **Layout:** The chat interface will occupy the full width of the screen, with a sticky input bar always visible at the bottom, just above the software keyboard.
+*   **Layout:** The chat interface will occupy the full width of the screen, with a sticky input bar always visible at the bottom, just above the software keyboard. Content will primarily reflow into a single column.
 *   **Navigation:** A simple top bar will display the app name. A small overflow or hamburger menu (if needed for "About" or "Help" sections) will provide access to secondary information without cluttering the main view.
-*   **Behavior:** When the software keyboard opens, the view will automatically scroll to ensure the latest messages and the input field remain visible. Message bubbles and buttons will feature generous touch target areas.
+*   **Behavior:** When the software keyboard opens, the view will automatically scroll to ensure the latest messages and the input field remain visible. Message bubbles and buttons will feature generous touch target areas, adhering to a minimum size of 44x44px for interactive elements.
 *   **Most Important:** The mobile experience should feel as intuitive and frictionless as a native messaging app: "open, type, send, read" without any friction or clutter.
 
 ### 8.2 Accessibility Strategy
@@ -345,7 +366,7 @@ The Himolde Study Friend application will provide a seamless and intuitive exper
 *   **Proper Labels:** Semantic HTML will be used wherever possible. Appropriate `aria-label` or `aria-labelledby` attributes will be provided for the chat input field, buttons, and other interactive elements, ensuring screen reader compatibility and clear identification of purpose.
 *   **Clear Focus States:** Visible and distinct focus indicators will be implemented for all interactive elements, making it unambiguously clear to keyboard users where their focus is currently located.
 *   **Sufficient Color Contrast:** All text and interactive elements will meet WCAG 2.1 Level AA contrast requirements (at least 4.5:1 for regular text, 3:1 for large text and graphical objects) against their background. This will be ensured by adhering strictly to the `Clear Horizon` color palette.
-*   **Screen Reader Friendly Announcements:** Important dynamic updates, such as bot responses appearing in the chat history, loading states, and error messages, will be announced to screen reader users (e.g., using `aria-live` regions) to provide contextual feedback without visual cues, ensuring a comprehensive understanding of the conversational flow.
+*   **Alt Text Strategy for Images:** All non-decorative images will include descriptive `alt` text to convey their content and purpose to screen reader users. Decorative images will have empty `alt` attributes (`alt=""`). This ensures visual information is accessible to all users.
 
 **Testing Strategy:**
 *   **Automated Testing:** Utilize tools like Lighthouse and axe DevTools during development and integrate them into CI/CD pipelines to catch common accessibility issues early.
@@ -397,6 +418,7 @@ You've made thoughtful choices through visual collaboration that will create a g
 This UX Design Specification was created through visual collaboration:
 
 - **Color Theme Visualizer**: C:\Users\fredr\Documents\KIProject\SG-KI-Krigerne\docs/ux-color-themes.html
+  - _Note: While the process involved exploring multiple theme options, the generated HTML primarily documents the chosen 'Clear Horizon' theme and its complete palette, assuming prior collaborative selection or adherence to an existing brand._
   - Interactive HTML showing all color theme options explored
   - Live UI component examples in each theme
   - Side-by-side comparison and semantic color usage

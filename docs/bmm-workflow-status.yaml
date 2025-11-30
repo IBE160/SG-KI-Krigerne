@@ -40,9 +40,9 @@ validate-prd: docs/validation-report-2025-11-29-v3.md  # agent: pm
 create-design: docs/ux-design-specification.md  # agent: ux-designer
 
 # Phase 2: Solutioning
-create-architecture: pending  # agent: architect
-validate-architecture: optional  # agent: architect
-solutioning-gate-check: pending  # agent: architect
+create-architecture: docs/architecture.md  # agent: architect
+validate-architecture: docs/validation-report-2025-11-30.md  # agent: architect
+solutioning-gate-check: docs/implementation-readiness-report-2025-11-30.md  # agent: architect
 
 # Phase 3: Implementation
 sprint-planning: pending  # agent: sm

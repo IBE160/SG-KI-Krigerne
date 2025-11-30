@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Himolde Study Friend - Color Theme Visualizer</title>
+    <style>
+        :root {
+            --font-family-sans: "Inter", sans-serif; /* Example font */
+            --border-radius: 0.375rem; /* Equivalent to shadcn/ui rounded-md */
+        }
+
+        body {
+            font-family: var(--font-family-sans);
+            margin: 0;
+            padding: 2rem;
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            color: #222;
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        h2 { font-size: 2rem; margin-top: 2rem; margin-bottom: 1rem; }
+        h3 { font-size: 1.5rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .theme-card {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .theme-header {
+            padding: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+        }
+
+        .theme-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .color-swatch-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .color-swatch-group h4 {
+            margin-bottom: 0.75rem;
+            color: #555;
+        }
+
+        .color-swatches {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .color-swatch {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            flex-direction: column;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .color-label {
+            font-size: 0.65rem;
+            margin-top: 0.25rem;
+            color: #666;
+            text-shadow: none;
+        }
+
+        .component-preview {
+            margin-top: 1.5rem;
+            border-top: 1px dashed #eee;
+            padding-top: 1.5rem;
+        }
+
+        .component-preview button {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .component-preview input[type="text"] {
+            padding: 0.6rem;
+            border-radius: var(--border-radius);
+            border: 1px solid;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .component-preview .alert {
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 1rem;
+        }
+
+        /* --- Theme Variables --- */
+        /* Theme: Academic Trust */
+        .theme-academic-trust {
+            --at-primary: #003366; /* Deep Blue */
+            --at-primary-light: #0056b3;
+            --at-accent: #6699CC; /* Cadet Blue */
+            --at-background: #F8F9FA; /* Off-White */
+            --at-text: #343A40; /* Dark Gray */
+            --at-text-light: #6C757D; /* Medium Gray */
+            --at-border: #DEE2E6;
+            --at-success: #28A745;
+            --at-warning: #FFC107;
+            --at-error: #DC3545;
+        }
+        .theme-academic-trust .theme-header { background-color: var(--at-primary); }
+        .theme-academic-trust .btn-primary { background-color: var(--at-primary); color: #fff; }
+        .theme-academic-trust .btn-primary:hover { background-color: var(--at-primary-light); }
+        .theme-academic-trust .btn-secondary { background-color: var(--at-accent); color: #fff; }
+        .theme-academic-trust .btn-secondary:hover { background-color: #5B8EB7; }
+        .theme-academic-trust .input-text { border-color: var(--at-border); color: var(--at-text); }
+        .theme-academic-trust .input-text:focus { border-color: var(--at-primary-light); outline: none; box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.2); }
+        .theme-academic-trust .alert-success { background-color: rgba(40, 167, 69, 0.1); color: var(--at-success); border: 1px solid var(--at-success); }
+        .theme-academic-trust .alert-error { background-color: rgba(220, 53, 69, 0.1); color: var(--at-error); border: 1px solid var(--at-error); }
+
+        /* Theme: Clear Horizon */
+        .theme-clear-horizon {
+            --ch-primary: #1E90FF; /* Dodger Blue */
+            --ch-primary-light: #64B5F6; /* Light Blue */
+            --ch-accent: #B0BEC5; /* Blue Grey */
+            --ch-background: #FDFDFD; /* Slightly warmer off-white */
+            --ch-text: #263238; /* Darker Slate */
+            --ch-text-light: #546E7A; /* Medium Slate */
+            --ch-border: #CFD8DC;
+            --ch-success: #4CAF50;
+            --ch-warning: #FFEB3B;
+            --ch-error: #F44336;
+        }
+        .theme-clear-horizon .theme-header { background-color: var(--ch-primary); }
+        .theme-clear-horizon .btn-primary { background-color: var(--ch-primary); color: #fff; }
+        .theme-clear-horizon .btn-primary:hover { background-color: #1A7BEB; }
+        .theme-clear-horizon .btn-secondary { background-color: var(--ch-accent); color: #fff; }
+        .theme-clear-horizon .btn-secondary:hover { background-color: #92A3A8; }
+        .theme-clear-horizon .input-text { border-color: var(--ch-border); color: var(--ch-text); }
+        .theme-clear-horizon .input-text:focus { border-color: var(--ch-primary-light); outline: none; box-shadow: 0 0 0 2px rgba(30, 144, 255, 0.2); }
+        .theme-clear-horizon .alert-success { background-color: rgba(76, 175, 80, 0.1); color: var(--ch-success); border: 1px solid var(--ch-success); }
+        .theme-clear-horizon .alert-error { background-color: rgba(244, 67, 54, 0.1); color: var(--ch-error); border: 1px solid var(--ch-error); }
+
+        /* Theme: Focused Clarity */
+        .theme-focused-clarity {
+            --fc-primary: #0A66C2; /* LinkedIn Blue */
+            --fc-primary-light: #1A73E8;
+            --fc-accent: #E0E0E0; /* Light Gray */
+            --fc-background: #FFFFFF; /* Pure White */
+            --fc-text: #212121; /* Very Dark Gray */
+            --fc-text-light: #757575; /* Medium Gray */
+            --fc-border: #BDBDBD;
+            --fc-success: #388E3C;
+            --fc-warning: #FFA000;
+            --fc-error: #D32F2F;
+        }
+        .theme-focused-clarity .theme-header { background-color: var(--fc-primary); }
+        .theme-focused-clarity .btn-primary { background-color: var(--fc-primary); color: #fff; }
+        .theme-focused-clarity .btn-primary:hover { background-color: #08529B; }
+        .theme-focused-clarity .btn-secondary { background-color: var(--fc-accent); color: var(--fc-text); border: 1px solid var(--fc-border); }
+        .theme-focused-clarity .btn-secondary:hover { background-color: #D6D6D6; }
+        .theme-focused-clarity .input-text { border-color: var(--fc-border); color: var(--fc-text); }
+        .theme-focused-clarity .input-text:focus { border-color: var(--fc-primary-light); outline: none; box-shadow: 0 0 0 2px rgba(10, 102, 194, 0.2); }
+        .theme-focused-clarity .alert-success { background-color: rgba(56, 142, 60, 0.1); color: var(--fc-success); border: 1px solid var(--fc-success); }
+        .theme-focused-clarity .alert-error { background-color: rgba(211, 47, 47, 0.1); color: var(--fc-error); border: 1px solid var(--fc-error); }
+
+        .color-label span { display: block; margin-top: 0.2rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Himolde Study Friend - Color Theme Visualizer</h1>
+        <p>Explore different blue and white color palettes designed for a professional, trustworthy, and efficient user experience.</p>
+
+        <div class="theme-grid">
+            <!-- Theme: Academic Trust -->
+            <div class="theme-card theme-academic-trust">
+                <div class="theme-header">Academic Trust</div>
+                <div class="theme-body">
+                    <div class="color-swatch-group">
+                        <h4>Main Palette</h4>
+                        <div class="color-swatches">
+                            <div class="color-swatch" style="background-color: var(--at-primary);"><span>Primary</span><span>#003366</span></div>
+                            <div class="color-swatch" style="background-color: var(--at-accent);"><span>Accent</span><span>#6699CC</span></div>
+                            <div class="color-swatch" style="background-color: var(--at-background); color: #333; border-color: var(--at-border);"><span>Background</span><span>#F8F9FA</span></div>
+                            <div class="color-swatch" style="background-color: var(--at-text); color: #fff;"><span>Text</span><span>#343A40</span></div>
+                        </div>
+                    </div>
+                    <div class="color-swatch-group">
+                        <h4>Semantic Colors</h4>
+                        <div class="color-swatches">
+                            <div class="color-swatch" style="background-color: var(--at-success);"><span>Success</span><span>#28A745</span></div>
+                            <div class="color-swatch" style="background-color: var(--at-warning);"><span>Warning</span><span>#FFC107</span></div>
+                            <div class="color-swatch" style="background-color: var(--at-error);"><span>Error</span><span>#DC3545</span></div>
+                        </div>
+                    </div>
+                    <div class="component-preview">
+                        <h4>Components</h4>
+                        <button class="btn-primary">Primary Button</button>
+                        <button class="btn-secondary">Secondary Button</button>
+                        <input type="text" class="input-text" placeholder="Text input...">
+                        <div class="alert alert-success">Success message here.</div>
+                        <div class="alert alert-error">Error message here.</div>
+                    </div>
+                    <p class="description">
+                        **Personality:** Professional, trustworthy, calming.<br>
+                        **Visual Style:** Modern, clean, organized. Deep, authoritative blue.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Theme: Clear Horizon -->
+            <div class="theme-card theme-clear-horizon">
+                <div class="theme-header">Clear Horizon</div>
+                <div class="theme-body">
+                    <div class="color-swatch-group">
+                        <h4>Main Palette</h4>
+                        <div class="color-swatches">
+                            <div class="color-swatch" style="background-color: var(--ch-primary);"><span>Primary</span><span>#1E90FF</span></div>
+                            <div class="color-swatch" style="background-color: var(--ch-accent);"><span>Accent</span><span>#B0BEC5</span></div>
+                            <div class="color-swatch" style="background-color: var(--ch-background); color: #333; border-color: var(--ch-border);"><span>Background</span><span>#FDFDFD</span></div>
+                            <div class="color-swatch" style="background-color: var(--ch-text); color: #fff;"><span>Text</span><span>#263238</span></div>
+                        </div>
+                    </div>
+                    <div class="color-swatch-group">
+                        <h4>Semantic Colors</h4>
+                        <div class="color-swatches">
+                            <div class="color-swatch" style="background-color: var(--ch-success);"><span>Success</span><span>#4CAF50</span></div>
+                            <div class="color-swatch" style="background-color: var(--ch-warning);"><span>Warning</span><span>#FFEB3B</span></div>
+                            <div class="color-swatch" style="background-color: var(--ch-error);"><span>Error</span><span>#F44336</span></div>
+                        </div>
+                    </div>
+                    <div class="component-preview">
+                        <h4>Components</h4>
+                        <button class="btn-primary">Primary Button</button>
+                        <button class="btn-secondary">Secondary Button</button>
+                        <input type="text" class="input-text" placeholder="Text input...">
+                        <div class="alert alert-success">Success message here.</div>
+                        <div class="alert alert-error">Error message here.</div>
+                    </div>
+                    <p class="description">
+                        **Personality:** Fresh, efficient, optimistic, clear.<br>
+                        **Visual Style:** Airy, modern, approachable. Lighter, vibrant blues.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Theme: Focused Clarity -->
+            <div class="theme-card theme-focused-clarity">
+                <div class="theme-header">Focused Clarity</div>
+                <div class="theme-body">
+                    <div class="color-swatch-group">
+                        <h4>Main Palette</h4>
+                        <div class="color-swatches">
+                            <div class="color-swatch" style="background-color: var(--fc-primary);"><span>Primary</span><span>#0A66C2</span></div>
+                            <div class="color-swatch" style="background-color: var(--fc-accent); color: #333; border-color: var(--fc-border);"><span>Accent</span><span>#E0E0E0</span></div>
+                            <div class="color-swatch" style="background-color: var(--fc-background); color: #333; border-color: var(--fc-border);"><span>Background</span><span>#FFFFFF</span></div>
+                            <div class="color-swatch" style="background-color: var(--fc-text); color: #fff;"><span>Text</span><span>#212121</span></div>
+                        </div>
+                    </div>
+                    <div class="color-swatch-group">
+                        <h4>Semantic Colors</h4>
+                        <div class="color-swatches">
+                            <div class="color-swatch" style="background-color: var(--fc-success);"><span>Success</span><span>#388E3C</span></div>
+                            <div class="color-swatch" style="background-color: var(--fc-warning);"><span>Warning</span><span>#FFA000</span></div>
+                            <div class="color-swatch" style="background-color: var(--fc-error);"><span>Error</span><span>#D32F2F</span></div>
+                        </div>
+                    </div>
+                    <div class="component-preview">
+                        <h4>Components</h4>
+                        <button class="btn-primary">Primary Button</button>
+                        <button class="btn-secondary">Secondary Button</button>
+                        <input type="text" class="input-text" placeholder="Text input...">
+                        <div class="alert alert-success">Success message here.</div>
+                        <div class="alert alert-error">Error message here.</div>
+                    </div>
+                    <p class="description">
+                        **Personality:** Minimal, productive, focused.<br>
+                        **Visual Style:** Ultra-minimal, stark, highly functional. Single strong blue.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -35,9 +35,9 @@ research: docs/research-user-2025-11-13.md  # agent: analyst
 product-brief: docs/product-brief-ibe160  # agent: analyst
 
 # Phase 1: Planning
-prd: pending  # agent: pm
-validate-prd: optional  # agent: pm
-create-design: conditional  # agent: ux-designer
+prd: docs/prd.md  # agent: pm
+validate-prd: docs/validation-report-2025-11-29-v3.md  # agent: pm
+create-design: docs/ux-design-specification.md  # agent: ux-designer
 
 # Phase 2: Solutioning
 create-architecture: pending  # agent: architect

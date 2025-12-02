@@ -1,5 +1,7 @@
 # Gemini CLI Telemetry Processing Scripts
 
+This is purely for gemini cli telemetry and the .logging folder should NOT be used for anything else
+
 This directory contains scripts for processing and analyzing Gemini CLI telemetry logs.
 
 ## Scripts

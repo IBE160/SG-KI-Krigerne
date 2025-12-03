@@ -1,0 +1,108 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>2</epicId>
+    <storyId>2</storyId>
+    <title>Implement Knowledge Base Retrieval</title>
+    <status>drafted</status>
+    <generatedAt>Wednesday, December 3, 2025</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>C:\Users\fredr\Documents\KIProject\SG-KI-Krigerne\docs\sprint-artifacts</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>System</asA>
+    <iWant>to search the structured knowledge base for specific information based on a parsed query</iWant>
+    <soThat>I can provide the generation component with the context needed to answer a user's question</soThat>
+    <tasks>
+<task id="1" title="Implement Knowledge Base Retrieval Logic" ac_refs="1, 2, 3, 4, 5">
+  <subtask id="1.1">Create a new file `backend/src/rag/knowledge_base_retriever.py`.</subtask>
+  <subtask id="1.2">Implement a function in `knowledge_base_retriever.py` that takes a parsed query (intent and entity) as input.</subtask>
+  <subtask id="1.3">The function should connect to the `knowledge_base.json` (or PostgreSQL DB).</subtask>
+  <subtask id="1.4">Implement logic to find the course matching the entity (`course_code`).</subtask>
+  <subtask id="1.5">Implement logic to extract the specific field based on the intent.</subtask>
+  <subtask id="1.6">Return the extracted information or a "not found" signal.</subtask>
+</task>
+<task id="2" title="Integrate Retriever with Chat API" ac_refs="1, 2">
+  <subtask id="2.1">In `backend/src/api/chat.py`, import and call the knowledge base retriever after parsing the query.</subtask>
+  <subtask id="2.2">Pass the parsed query to the retriever.</subtask>
+  <subtask id="2.3">For now, return the retrieved information (or "not found" signal) as a placeholder response.</subtask>
+</task>
+<task id="3" title="Write Backend Tests (Pytest)">
+  <subtask id="3.1">Create `backend/tests/test_knowledge_base_retriever.py`.</subtask>
+  <subtask id="3.2">Write a test for successful course and information retrieval. (AC: 3, 4)</subtask>
+  <subtask id="3.3">Write a test to verify "not found" signal for a non-existent course. (AC: 5)</subtask>
+  <subtask id="3.4">Write a test to verify "not found" signal for a non-existent field. (AC: 5)</subtask>
+  <subtask id="3.5">Write an integration test to verify the retriever is called from the chat API. (AC: 1, 2)</subtask>
+</task>
+</tasks>
+  </story>
+
+  <acceptanceCriteria>
+<ac id="1">Given a parsed intent (e.g., `get_exam_format`) and entity (e.g., `course_code: TDT4140`),</ac>
+<ac id="2">When the retrieval component is invoked,</ac>
+<ac id="3">Then it searches the `knowledge_base.json` (or PostgreSQL equivalent) for the matching course.</ac>
+<ac id="4">And it extracts the specific information requested (e.g., the value of the `exam_format` field for `TDT4140`).</ac>
+<ac id="5">And if no matching course or information is found, it returns a "not found" signal.</ac>
+</acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <artifact path="docs/prd.md" title="PRD: Product Scope - MVP" section="MVP - Minimum Viable Product" snippet="The Minimum Viable Product (MVP) for the Himolde Study Friend chatbot will focus on delivering the essential functionality... Structured Knowledge Base Integration: A backend connection to a structured dataset (e.g., manual JSON or CSV) will serve as the knowledge base, ensuring that answers are derived from reliable, non-hardcoded sources."/>
+      <artifact path="docs/prd.md" title="PRD: Functional Requirements" section="Course Information Retrieval" snippet="FR9: The system shall provide answers derived from a structured knowledge base. FR12: The knowledge base shall be structured to support accurate information retrieval."/>
+      <artifact path="docs/prd.md" title="PRD: Success Criteria" section="Data Source Integrity" snippet="Answers provided by the chatbot must consistently originate from a structured, non-hardcoded data source, ensuring reliability and maintainability."/>
+      <artifact path="docs/sprint-artifacts/tech-spec-epic-2.md" title="Epic Technical Specification: Core Question Answering" section="Knowledge Base Retrieval Module (Backend)" snippet="Searches the structured knowledge base (PostgreSQL + pgvector) for relevant course information based on identified intent and entities."/>
+      <artifact path="docs/sprint-artifacts/tech-spec-epic-2.md" title="Epic Technical Specification: Core Question Answering" section="Data Models and Contracts" snippet="Course Information (as stored in PostgreSQL): `course_code`, `name`, `description`, `learning_outcomes`, `exam_format`, `mandatory_assignments`, `embedding` (for pgvector semantic search)."/>
+      <artifact path="docs/sprint-artifacts/tech-spec-epic-2.md" title="Epic Technical Specification: Core Question Answering" section="Workflows and Sequencing" snippet="Knowledge Base Retrieval (FR6, FR7, FR8): The Retrieval Module queries the PostgreSQL database (potentially using `pgvector` for semantic search on the `embedding` field) to find information matching the identified intent and entities."/>
+      <artifact path="docs/sprint-artifacts/tech-spec-epic-2.md" title="Epic Technical Specification: Core Question Answering" section="Dependencies and Integrations" snippet="Database: PostgreSQL: `^16.0` (Relational database with `pgvector` extension)."/>
+      <artifact path="docs/sprint-artifacts/tech-spec-epic-2.md" title="Epic Technical Specification: Core Question Answering" section="Acceptance Criteria (Authoritative) - Story 2.2: Implement Knowledge Base Retrieval" snippet="ACs for Story 2.2, detailing the retrieval process, extraction of specific information, and handling of 'not found' signals."/>
+      <artifact path="docs/architecture.md" title="Architecture: Data Persistence" section="Data Persistence" snippet="PostgreSQL is ideal for structured, relational course data and provides a solid foundation for future vector search capabilities."/>
+      <artifact path="docs/architecture.md" title="Architecture: AI Application" section="AI Application" snippet="Gemini API for LLM integration, PostgreSQL with pgvector for the vector database, and a lightweight custom RAG orchestration flow."/>
+      <artifact path="docs/architecture.md" title="Architecture: Data Architecture" section="Data Architecture" snippet="The core data architecture revolves around a PostgreSQL database. It will store structured course information, including: `courses` table and `feedback` table. `pgvector` will be enabled in PostgreSQL to store vector embeddings for the RAG system."/>
+      <artifact path="docs/epics.md" title="Epics: Epic 2: Core Question Answering" section="Story 2.2: Implement Knowledge Base Retrieval (MVP)" snippet="As a System, I want to retrieve relevant information from the knowledge base based on the user's query, so that I can provide accurate, grounded answers."/>
+      <artifact path="docs/epics.md" title="Epics: FR Coverage Map" section="Epic 2: Core Question Answering" snippet="FR6: The system can retrieve learning outcomes for a specific course. FR7: The system can retrieve the exam format for a specific course. FR8: The system can retrieve information about mandatory assignments for a specific course."/>
+      <artifact path="docs/ux-design-specification.md" title="UX Design: Empty State Patterns" section="Empty State Patterns" snippet="When the bot cannot find an answer to a user's query, it will respond with a polite and informative message within the chat (e.g., 'I'm sorry, I couldn't find the information for that. Try rephrasing or ask about another course.'), aligning with FR10."/>
+    </docs>
+    <code>
+      <artifact path="backend/src/rag/knowledge_base_retriever.py" kind="service" reason="New file to be created by this story for knowledge base retrieval logic."/>
+      <artifact path="backend/src/api/chat.py" kind="api_endpoint" reason="Will be modified to integrate the knowledge base retriever." lines="9-15"/>
+      <artifact path="backend/src/rag/query_parser.py" kind="utility" reason="Provides parsed query (intent and entity) as input to this story's retrieval logic." lines="9-30"/>
+      <artifact path="backend/src/db/knowledge_base_manager.py" kind="database_manager" reason="Manages loading of `knowledge_base.json` which this story will query." lines="7-43"/>
+      <artifact path="backend/src/models/course.py" kind="data_model" reason="Defines the structure of course data to be retrieved." lines="3-8"/>
+      <artifact path="backend/tests/test_knowledge_base_manager.py" kind="test" reason="Existing test file for the knowledge base manager, provides testing patterns."/>
+    </code>
+    <dependencies>
+      <python>
+        <package name="fastapi" version="0.122.0" />
+        <package name="uvicorn" version="0.27.0.post1" />
+        <package name="pydantic" version="2.7.4" />
+        <package name="pytest" version="8.0.0" />
+      </python>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint type="architecture">Adherence to RAG (Retrieval-Augmented Generation) architecture defined in `docs/architecture.md`.</constraint>
+    <constraint type="data_access">Data access should be isolated to the `backend/src/db` and `backend/src/rag` modules.</constraint>
+    <constraint type="persistence">The retrieval logic will initially target a JSON file (`knowledge_base.json`) but must be designed for easy migration to PostgreSQL as per the architecture decision.</constraint>
+    <constraint type="technical_debt">Pydantic deprecation warning (`dummy_course.dict()` vs `model_dump()`) exists in `backend/tests/test_knowledge_base_manager.py` and should be addressed in a separate cleanup task.</constraint>
+  </constraints>
+  <interfaces>
+    <interface name="chat_endpoint" kind="REST endpoint" signature="POST /chat" path="backend/src/api/chat.py" />
+    <interface name="parse_query" kind="function" signature="parse_query(query: str) -> ParsedQuery" path="backend/src/rag/query_parser.py" />
+    <interface name="load_knowledge_base" kind="function" signature="load_knowledge_base(path: Path) -> List[Course]" path="backend/src/db/knowledge_base_manager.py" />
+  </interfaces>
+  <tests>
+    <standards>Backend testing will utilize Pytest as the primary framework, following standard Python testing practices. Frontend testing (not directly applicable to this story) uses Vitest. Tests should be organized to mirror the source code structure, with a focus on unit and integration tests. Test fixtures (e.g., `tmp_path` for temporary files) should be used where appropriate for isolated and reproducible tests.</standards>
+    <locations>
+      <location>backend/tests/test_knowledge_base_retriever.py</location>
+      <location>backend/tests/test_chat_api.py</location>
+      <location>backend/tests/</location>
+    </locations>
+    <ideas>
+      <idea ac_ids="3,4">Write unit tests for `knowledge_base_retriever.py` to verify successful course and information retrieval when valid intent and entity are provided, and the information exists in the knowledge base.</idea>
+      <idea ac_ids="5">Write unit tests for `knowledge_base_retriever.py` to verify a "not found" signal is returned when a non-existent course code is provided.</idea>
+      <idea ac_ids="5">Write unit tests for `knowledge_base_retriever.py` to verify a "not found" signal is returned when a valid course code is provided but the requested information field does not exist.</idea>
+      <idea ac_ids="1,2">Write integration tests within `test_chat_api.py` to verify that the `knowledge_base_retriever` is correctly called by the chat API after query parsing, and its returned result is handled appropriately (e.g., returned as a placeholder response).</idea>
+    </ideas>
+  </tests>
+</story-context>

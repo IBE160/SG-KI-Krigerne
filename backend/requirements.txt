@@ -1,5 +1,4 @@
 fastapi==0.122.0
 uvicorn==0.27.0.post1
-pydantic==1.10.13  # DeprecationWarning: Pydantic v1 is deprecated. Warnings related to typing.py will occur.
-                   # A full migration to Pydantic v2 is recommended for future Python 3.15+ compatibility.
+pydantic==2.7.4
 pytest==8.0.0

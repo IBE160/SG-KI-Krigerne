@@ -48,7 +48,7 @@ development_status:
   epic-2: contexted
   2-1-implement-natural-language-query-input: done
   2-2-implement-knowledge-base-retrieval: done
-  2-3-generate-conversational-responses: backlog
+  2-3-generate-conversational-responses: done
   2-4-handle-i-dont-know-scenarios: backlog
   epic-2-retrospective: optional
 

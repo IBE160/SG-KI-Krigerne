@@ -2,17 +2,21 @@ import React, { useState, useRef, useEffect } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { v4 as uuidv4 } from 'uuid';
+import { streamChatResponse } from "@/lib/api"; // Import the streaming API client
 
 // Define the structure of a chat message
 interface ChatMessage {
-  id: number;
+  id: string; // Use string for UUIDs for better uniqueness
   text: string;
   sender: "user" | "bot";
+  streaming?: boolean; // Indicate if this message is currently being streamed
 }
 
 const ChatWindow: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const [isTyping, setIsTyping] = useState(false); // New state for typing indicator
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -22,35 +26,76 @@ const ChatWindow: React.FC = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
 
+    const userMessageId = uuidv4();
     const userMessage: ChatMessage = {
-      id: messages.length + 1,
+      id: userMessageId,
       text: inputValue,
       sender: "user",
     };
 
-    const currentInputValue = inputValue;
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
-    setInputValue("");
+    const botMessageId = uuidv4();
+    const initialBotMessage: ChatMessage = {
+      id: botMessageId,
+      text: "", // Initial empty text for streaming bot response
+      sender: "bot",
+      streaming: true, // Mark as streaming
+    };
 
-    // Simulate bot echo response
-    setTimeout(() => {
-      setMessages((prevMessages) => {
-        const botMessage: ChatMessage = {
-          id: prevMessages.length + 1,
-          text: currentInputValue, // Echo the same message back
-          sender: "bot",
-        };
-        return [...prevMessages, botMessage];
-      });
-    }, 500);
+    setMessages((prevMessages) => [...prevMessages, userMessage, initialBotMessage]);
+    setInputValue("");
+    setIsTyping(true); // Show typing indicator
+
+    try {
+      await streamChatResponse(
+        userMessage.text,
+        (chunk) => {
+          // Update the bot's message with new chunks
+          setMessages((prevMessages) =>
+            prevMessages.map((msg) =>
+              msg.id === botMessageId ? { ...msg, text: chunk } : msg
+            )
+          );
+        },
+        () => {
+          // On complete, set streaming to false
+          setMessages((prevMessages) =>
+            prevMessages.map((msg) =>
+              msg.id === botMessageId ? { ...msg, streaming: false } : msg
+            )
+          );
+          setIsTyping(false); // Hide typing indicator
+        },
+        (error) => {
+          // On error, display error message and set streaming to false
+          setMessages((prevMessages) =>
+            prevMessages.map((msg) =>
+              msg.id === botMessageId
+                ? { ...msg, text: `Error: ${error.message}`, streaming: false }
+                : msg
+            )
+          );
+          setIsTyping(false); // Hide typing indicator
+        }
+      );
+    } catch (error: any) {
+      console.error("Failed to stream chat response:", error);
+      // Fallback for streamChatResponse initial fetch error
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg.id === botMessageId
+            ? { ...msg, text: `Error: ${error.message}`, streaming: false }
+            : msg
+        )
+      );
+      setIsTyping(false); // Hide typing indicator
+    }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !isTyping) { // Prevent sending new message while bot is typing
       handleSendMessage();
     }
   };
@@ -86,6 +131,13 @@ const ChatWindow: React.FC = () => {
             </div>
           </div>
         ))}
+        {isTyping && (
+          <div className="flex mb-2 justify-start">
+            <div className="rounded-lg px-3 py-2 bg-muted italic text-muted-foreground">
+              Himolde Study Friend is typing...
+            </div>
+          </div>
+        )}
         <div ref={endOfMessagesRef} />
         <ScrollBar orientation="vertical" />
       </ScrollArea>
@@ -102,9 +154,10 @@ const ChatWindow: React.FC = () => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
+          disabled={isTyping} // Disable input while bot is typing
         />
         {/* Send button */}
-        <Button aria-label="Send message" data-testid="send-button" onClick={handleSendMessage}>
+        <Button aria-label="Send message" data-testid="send-button" onClick={handleSendMessage} disabled={isTyping}>
           Send
         </Button>
       </div>
@@ -113,3 +166,4 @@ const ChatWindow: React.FC = () => {
 };
 
 export default ChatWindow;
+

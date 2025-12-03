@@ -1,0 +1,187 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>2</epicId>
+    <storyId>3</storyId>
+    <title>Generate Conversational Responses</title>
+    <status>drafted</status>
+    <generatedAt>Wednesday, December 3, 2025</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/2-3-generate-conversational-responses.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>a User</asA>
+    <iWant>to receive answers in a clear and conversational format</iWant>
+    <soThat>the information is easy to understand</soThat>
+    <tasks>
+    <task id="develop-generation-component" ac="1, 2, 3">
+        <description>Implement a function/class to take structured data as input and generate a natural language sentence.</description>
+        <subtask>[ ] Create a new Python module (e.g., `generator.py`) within `backend/src/rag/`.</subtask>
+        <subtask>[ ] Implement a function/class to take structured data (e.g., a dictionary with intent, entity, and retrieved data) as input.</subtask>
+        <subtask>[ ] Using the Gemini API (or a simple templating approach for MVP), generate a natural language sentence from the input.</subtask>
+        <subtask>[ ] Ensure the generated response is conversational and directly answers the implied user question.</subtask>
+        <subtask>[ ] Integrate this generator with the output of the retrieval component (from Story 2.2).</subtask>
+    </task>
+    <task id="implement-streaming-api-endpoint" ac="5">
+        <description>Modify or create a new endpoint in `backend/src/api/` (e.g., `chat_api.py`) to handle the `/chat` route and implement Server-Sent Events (SSE).</description>
+        <subtask>[ ] Modify or create a new endpoint in `backend/src/api/` (e.g., `chat_api.py`) to handle the `/chat` route.</subtask>
+        <subtask>[ ] Implement Server-Sent Events (SSE) or streaming HTTP to allow the backend to push partial responses to the frontend.</subtask>
+        <subtask>[ ] Ensure each chunk sent is a JSON object with `type: "chunk"` and `content: "..."`, followed by a final `type: "done"` message.</subtask>
+        <subtask>[ ] Integrate the generation component's output into this streaming mechanism.</subtask>
+    </task>
+    <task id="integrate-streaming-response-in-frontend" ac="6">
+        <description>Update `frontend/src/lib/api-client.ts` and React components to handle and display streaming responses.</description>
+        <subtask>[ ] Update the `frontend/src/lib/api-client.ts` to handle streaming responses from the `/chat` endpoint.</subtask>
+        <subtask>[ ] Modify relevant React components in `frontend/src/components/` (e.g., `ChatWindow`, `ChatMessageBubble`) to:</subtask>
+        <subtask>    [ ] Render a typing indicator while receiving streamed content.</subtask>
+        <subtask>    [ ] Append streamed chunks to the assistant's message in real-time.</subtask>
+        <subtask>    [ ] Stop the typing indicator and finalize the message upon receiving the `{ "type": "done" }` signal.</subtask>
+        <subtask>    [ ] Ensure messages are displayed according to UX specifications (left-aligned, correct styling).</subtask>
+    </task>
+    <task id="unit-tests-generation-component" ac="3">
+        <description>Write unit tests for `backend/src/rag/generator.py` to verify formatting and edge cases.</description>
+        <subtask>[ ] Write tests for `backend/src/rag/generator.py` to verify:</subtask>
+        <subtask>    [ ] Correct formatting of various types of retrieved information into natural language sentences.</subtask>
+        <subtask>    [ ] Handling of edge cases (e.g., empty retrieved data if the retriever is somehow invoked with it).</subtask>
+    </task>
+    <task id="integration-tests-streaming-api" ac="4, 5">
+        <description>Write integration tests for the `/chat` endpoint to verify streaming responses, chunk format, and 2-second response time.</description>
+        <subtask>[ ] Write tests to verify the `/chat` endpoint correctly streams responses.</subtask>
+        <subtask>[ ] Test the format of the streamed JSON chunks (`type`, `content`).</subtask>
+        <subtask>[ ] Verify the endpoint sends the final `{ "type": "done" }` message.</subtask>
+        <subtask>[ ] Ensure the 2-second response time performance criterion is met for typical queries.</subtask>
+    </task>
+    <task id="frontend-integration-tests" ac="6">
+        <description>Write frontend integration tests to verify correct handling and display of streamed responses, typing indicators, and message finalization.</description>
+        <subtask>[ ] Write tests to verify the frontend correctly handles and displays streamed responses.</subtask>
+        <subtask>[ ] Test the display of typing indicators.</subtask>
+        <subtask>[ ] Verify partial messages are appended correctly.</subtask>
+        <subtask>[ ] Test that the message is finalized correctly after receiving the "done" signal.</subtask>
+        <subtask>[ ] Ensure responsiveness and accessibility of the message display.</subtask>
+    </task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <ac id="1">Given the system has successfully retrieved a piece of information (e.g., "4-hour written exam") from the knowledge base (output of Story 2.2)</ac>
+    <ac id="2">When the generation component in the backend (`backend/src/rag/`) is invoked with this retrieved information</ac>
+    <ac id="3">Then it shall format this information into a clear, natural language sentence (e.g., "The exam format for TDT4140 is a 4-hour written exam.")</ac>
+    <ac id="4">And the generated conversational response shall be sent back to the UI within 2 seconds.</ac>
+    <ac id="5">And the backend's `/chat` streaming endpoint (`POST /chat`) shall deliver the response to the frontend using Server-Sent Events (SSE) or streaming HTTP, where each partial response is a JSON chunk (`{ "type": "chunk", "content": "..." }`). A final `{ "type": "done" }` message must be sent to signal completion.</ac>
+    <ac id="6">And the frontend UI shall display this generated response within the chat history, ensuring it adheres to the "Structured Clarity" design direction for assistant messages (left-aligned, appropriate styling), and displays a typing indicator while receiving the streamed response.</ac>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <artifact path="docs/prd.md" title="Product Requirements Document" section="Functional Requirements" snippet="FR3: The system shall provide responses in a clear and conversational manner. FR4: The user shall receive real-time message delivery from the chatbot." />
+      <artifact path="docs/prd.md" title="Product Requirements Document" section="Product Scope" snippet="Natural Language Q&A: The chatbot will be capable of understanding and responding to natural language queries... Basic User Interface: A simple web or chat interface will be provided..." />
+      <artifact path="docs/prd.md" title="Product Requirements Document" section="User Experience Principles" snippet="Clarity and Conciseness: Information presented clearly, directly, and without jargon. Responsiveness: The interface should be quick to respond to user input, especially for message delivery." />
+      <artifact path="docs/sprint-artifacts/tech-spec-epic-2.md" title="Epic Technical Specification: Core Question Answering" section="Detailed Design" snippet="Response Generation Module (Backend): Responsibilities: Formats retrieved information into natural language conversational responses. Handles 'I don't know' scenarios." />
+      <artifact path="docs/sprint-artifacts/tech-spec-epic-2.md" title="Epic Technical Specification: Core Question Answering" section="Data Models and Contracts" snippet="Chat Response (Backend -> Frontend - Streaming via SSE): { 'type': 'chunk', 'content': '...' }" />
+      <artifact path="docs/sprint-artifacts/tech-spec-epic-2.md" title="Epic Technical Specification: Core Question Answering" section="APIs and Interfaces" snippet="POST /chat (Streaming HTTP/SSE): Purpose: Primary endpoint for user interaction, sending natural language queries and receiving streaming conversational responses." />
+      <artifact path="docs/sprint-artifacts/tech-spec-epic-2.md" title="Epic Technical Specification: Core Question Answering" section="Workflows and Sequencing" snippet="Response Generation (FR3, FR10): If relevant information is retrieved: The Generation Module formats the data into a conversational natural language response. Streaming Response: The backend streams the generated response back to the frontend chunk by chunk via SSE. Frontend Display: Frontend receives streaming chunks and displays them in the chat history area in real-time (FR4)." />
+      <artifact path="docs/sprint-artifacts/tech-spec-epic-2.md" title="Epic Technical Specification: Core Question Answering" section="Acceptance Criteria (Authoritative)" snippet="Story 2.3: Generate Conversational Responses: 1. Given the system has retrieved a piece of information..., 2. When the generation component is invoked..., 3. Then it formats this information into a natural language sentence..., 4. And the generated response is sent back to the UI within 2 seconds. 5. And the response appears in the chat history for the user." />
+      <artifact path="docs/architecture.md" title="Architecture" section="Decision Summary" snippet="Real-time Communication: Chosen: Server-Sent Events (SSE) or streaming HTTP for efficient one-way streaming of partial answers..." />
+      <artifact path="docs/architecture.md" title="Architecture" section="Implementation Patterns" snippet="Chat Streaming: SSE/HTTP where each chunk is JSON ({ 'type': 'chunk', 'content': '...' }) and a final ({ 'type': 'done' })." />
+      <artifact path="docs/architecture.md" title="Architecture" section="API Contracts" snippet="Main Chat Endpoint (`POST /chat`): Streams responses using Server-Sent Events (SSE) / Streaming HTTP." />
+      <artifact path="docs/ux-design-specification.md" title="ibe160 UX Design Specification" section="Core User Experience" snippet="Defining Experience: The defining experience of Himolde Study Friend is that 'It’s the fastest way to get clear answers about your college courses.' Core Experience Principles: Speed: Key actions (asking a question, receiving an answer) should feel instantaneous and responsive... Key UX Patterns to Adopt: Streamlined conversational interface: A single, prominent input field, clear message bubbles, and intuitive message flow." />
+      <artifact path="docs/ux-design-specification.md" title="ibe160 UX Design Specification" section="Custom Component: Chat Message Bubble" snippet="Purpose: To present a single message in the conversation in a clear, readable way. Visually distinguish who sent the message (bot vs. user)." />
+      <artifact path="docs/ux-design-specification.md" title="ibe160 UX Design Specification" section="UX Pattern Decisions" snippet="Feedback Patterns -> Loading: A clear and subtle typing indicator (e.g., animated dots) will be displayed... Search Patterns (Implicit in Chat): Search results are presented directly as a formatted bot message within the chat history..." />
+      <artifact path="docs/ux-design-specification.md" title="ibe160 UX Design Specification" section="Responsive Design & Accessibility" snippet="Mobile (Small Screens): The chat interface will occupy the full width of the screen, with a sticky input bar always visible at the bottom..." />
+      <artifact path="docs/epics.md" title="ibe160 - Epic Breakdown" section="Epic 2: Core Question Answering" snippet="Story 2.3: Generate Conversational Responses: As a User, I want to receive answers in a clear and conversational format, so that the information is easy to understand." />
+      <artifact path="docs/epics.md" title="ibe160 - Epic Breakdown" section="FR Coverage Map" snippet="FR3: The system shall provide responses in a clear and conversational manner." />
+    </docs>
+    <code>
+      <artifact path="backend/src/api/chat.py" kind="endpoint" symbol="chat_endpoint" reason="FastAPI endpoint for handling chat queries" />
+      <artifact path="backend/src/api/chat.py" kind="model" symbol="Query" reason="Pydantic model for incoming chat queries" />
+      <artifact path="backend/src/rag/query_parser.py" kind="service" symbol="parse_query" reason="Function to parse natural language queries into intent and entities" />
+      <artifact path="backend/src/rag/query_parser.py" kind="model" symbol="ParsedQuery" reason="Pydantic model for parsed query intent and entities" />
+      <artifact path="backend/src/rag/knowledge_base_retriever.py" kind="service" symbol="retrieve_knowledge" reason="Function to retrieve information from the knowledge base based on a parsed query" />
+      <artifact path="backend/src/models/course.py" kind="model" symbol="Course" reason="Pydantic model defining the structure of course data" />
+      <artifact path="backend/src/db/knowledge_base_manager.py" kind="service" symbol="load_knowledge_base" reason="Function to load the knowledge base from a JSON file" />
+      <artifact path="backend/src/db/knowledge_base_manager.py" kind="service" symbol="create_knowledge_base_if_not_exists" reason="Function to ensure knowledge base file exists" />
+    </code>
+    <dependencies>
+      <ecosystem name="Node.js" path="himolde-study-friend/package.json">
+        <package name="@radix-ui/react-scroll-area" version="^1.2.10" />
+        <package name="@radix-ui/react-slot" version="^1.2.4" />
+        <package name="class-variance-authority" version="^0.7.1" />
+        <package name="clsx" version="^2.1.1" />
+        <package name="lucide-react" version="^0.555.0" />
+        <package name="react" version="^19.2.0" />
+        <package name="react-dom" version="^19.2.0" />
+        <package name="tailwind-merge" version="^3.4.0" />
+        <package name="tailwindcss-animate" version="^1.0.7" />
+        <package name="@eslint/js" version="^9.39.1" />
+        <package name="@tailwindcss/postcss" version="^4.1.17" />
+        <package name="@testing-library/dom" version="^10.4.1" />
+        <package name="@testing-library/jest-dom" version="^6.9.1" />
+        <package name="@testing-library/react" version="^16.3.0" />
+        <package name="@testing-library/user-event" version="^14.6.1" />
+        <package name="@types/node" version="^24.10.1" />
+        <package name="@types/react" version="^19.2.5" />
+        <package name="@types/react-dom" version="^19.2.3" />
+        <package name="@vitejs/plugin-react" version="^5.1.1" />
+        <package name="@vitest/coverage-v8" version="^4.0.14" />
+        <package name="autoprefixer" version="^10.4.22" />
+        <package name="eslint" version="^9.39.1" />
+        <package name="eslint-config-prettier" version="^10.1.8" />
+        <package name="eslint-plugin-prettier" version="^5.5.4" />
+        <package name="eslint-plugin-react-hooks" version="^7.0.1" />
+        <package name="eslint-plugin-react-refresh" version="^0.4.24" />
+        <package name="globals" version="^16.5.0" />
+        <package name="jsdom" version="^27.2.0" />
+        <package name="postcss" version="^8.5.6" />
+        <package name="prettier" version="^3.7.3" />
+        <package name="tailwindcss" version="^4.1.17" />
+        <package name="typescript" version="~5.9.3" />
+        <package name="typescript-eslint" version="^8.46.4" />
+        <package name="vite" version="^7.2.4" />
+        <package name="vitest" version="^4.0.15" />
+      </ecosystem>
+      <ecosystem name="Python" path="backend/requirements.txt">
+        <package name="fastapi" version="==0.122.0" />
+        <package name="uvicorn" version="==0.27.0.post1" />
+        <package name="pydantic" version="==2.7.4" />
+        <package name="pytest" version="==8.0.0" />
+        <package name="pytest-mock" version="==3.15.1" />
+      </ecosystem>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint>The generation component logic should reside in `backend/src/rag/`.</constraint>
+    <constraint>The API endpoint to stream responses will be in `backend/src/api/`.</constraint>
+    <constraint>Frontend UI components for displaying messages will be in `frontend/src/components/`.</constraint>
+    <constraint>Frontend API client for communication will be in `frontend/src/lib/`.</constraint>
+    <constraint>Adherence to Naming Conventions, Code Organization, Data Format (Consistency) as defined in `docs/architecture.md`.</constraint>
+    <constraint>Adherence to API Contracts as defined in `docs/architecture.md`.</constraint>
+    <constraint>Adherence to Security Architecture as defined in `docs/architecture.md`.</constraint>
+    <constraint>Adherence to Performance Considerations as defined in `docs/architecture.md`.</constraint>
+  </constraints>
+  <interfaces>
+    <interface name="chat_endpoint" kind="REST endpoint" signature="POST /chat" path="backend/src/api/chat.py" />
+  </interfaces>
+  <tests>
+    <standards>
+      <standard>Frontend testing: Vitest (fast, modern)</standard>
+      <standard>Python backend testing: Pytest (comprehensive)</standard>
+      <standard>Linting/Formatting: ESLint + Prettier for frontend; Black + Flake8 for backend</standard>
+      <standard>Unit Testing (Backend): Pytest for Chat Service, Knowledge Base Retrieval, Response Generation modules (intent/entity, DB queries, response formatting, 'I Don't Know' logic).</standard>
+      <standard>Integration Testing (Backend): Pytest with FastAPI's TestClient for end-to-end flow from POST /chat to streaming response (mock Gemini API if necessary).</standard>
+      <standard>UI Testing (Frontend): Vitest with React Testing Library for user input, real-time streaming display, 'I Don't Know' messages.</standard>
+      <standard>Acceptance Criteria Testing (End-to-End): Manual and automated tests based on ACs for accuracy and 'I Don't Know' scenarios.</standard>
+      <standard>Performance Testing: Load testing on POST /chat for 1-2 second response time target.</standard>
+      <standard>Security Testing: Basic checks for prompt injection and sensitive data logging.</standard>
+    </standards>
+    <locations>
+      <location>backend/tests/</location>
+      <location>frontend/tests/</location>
+    </locations>
+    <ideas>
+      <idea ac="3">Unit Tests for Generation Component: Verify correct formatting of various types of retrieved information into natural language sentences. Handle edge cases (e.g., empty retrieved data).</idea>
+      <idea ac="4, 5">Integration Tests for Streaming API: Verify `/chat` endpoint correctly streams responses, test streamed JSON chunks (`type`, `content`), verify final `{ "type": "done" }` message, ensure 2-second response time performance.</idea>
+      <idea ac="6">Frontend Integration Tests: Verify frontend correctly handles and displays streamed responses, test display of typing indicators, verify partial messages are appended correctly, test message finalization after 'done' signal, ensure responsiveness and accessibility of message display.</idea>
+    </ideas>
+  </tests>
+</story-context>

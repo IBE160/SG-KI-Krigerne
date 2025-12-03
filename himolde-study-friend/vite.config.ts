@@ -14,5 +14,6 @@ export default defineConfig({
     environment: "jsdom",
     globals: true, // Optional: if you want to use global APIs like `test`, `expect`
     setupFiles: "./src/setupTests.ts", // Optional: for global test setup
+    include: ['tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'] // Limit test file discovery // Limit test file discovery
   },
 });

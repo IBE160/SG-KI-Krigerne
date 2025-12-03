@@ -1,25 +1,34 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from pydantic import BaseModel
-from pathlib import Path
 from src.rag.query_parser import parse_query
 from src.rag.knowledge_base_retriever import retrieve_knowledge
-from src.db.knowledge_base_manager import load_knowledge_base
+from src.rag.generator import generate_response
+from starlette.responses import StreamingResponse
+import json
+import asyncio
 
 router = APIRouter()
 
 class Query(BaseModel):
     query: str
 
-# Define the path to the knowledge base
-KNOWLEDGE_BASE_PATH = Path(__file__).parent.parent / "db" / "knowledge_base.json"
+async def event_generator(response_content: str):
+    """Generates SSE compliant events."""
+    # For MVP, send the entire response as one chunk
+    chunk = {"type": "chunk", "content": response_content}
+    yield f"data: {json.dumps(chunk)}\n\n"
+    
+    # Signal completion
+    done_chunk = {"type": "done"}
+    yield f"data: {json.dumps(done_chunk)}\n\n"
 
 @router.post("/chat")
-async def chat_endpoint(query: Query):
+async def chat_endpoint(query: Query, request: Request):
     """
-    Endpoint for natural language queries.
+    Endpoint for natural language queries, streaming conversational responses via SSE.
     """
-    # Load the knowledge base
-    knowledge_base = load_knowledge_base(KNOWLEDGE_BASE_PATH)
+    # Access the pre-loaded knowledge base from the app state
+    knowledge_base = request.app.state.knowledge_base
 
     # Parse the query
     parsed_query = parse_query(query.query)
@@ -27,7 +36,7 @@ async def chat_endpoint(query: Query):
     # Retrieve knowledge
     retrieved_info = retrieve_knowledge(parsed_query, knowledge_base)
 
-    if retrieved_info:
-        return {"answer": retrieved_info}
-    else:
-        return {"answer": "I'm sorry, I couldn't find the information for that."}
+    # Generate conversational response
+    conversational_response = generate_response(parsed_query, retrieved_info)
+
+    return StreamingResponse(event_generator(conversational_response), media_type="text/event-stream")

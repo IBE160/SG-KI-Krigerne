@@ -1,4 +1,5 @@
-import { vi } from 'vitest';
+// himolde-study-friend/src/setupTests.ts
+import '@testing-library/jest-dom';
 
-// Mock scrollIntoView for JSDOM
+// Mock scrollIntoView as it's not implemented in JSDOM
 window.HTMLElement.prototype.scrollIntoView = vi.fn();

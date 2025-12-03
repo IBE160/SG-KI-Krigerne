@@ -14,16 +14,12 @@ def create_knowledge_base_if_not_exists(path: Path = KNOWLEDGE_BASE_PATH):
     if not path.exists():
         initial_data = [] # Or include a dummy course if always present on creation
         try:
+            path.parent.mkdir(parents=True, exist_ok=True) # Ensure parent directories exist
             with open(path, "w", encoding="utf-8") as f:
                 json.dump(initial_data, f, indent=2)
             print(f"Created empty knowledge base at: {path}")
-            # Subtask 4.2: Implement file permission setting
-            # Note: For cross-platform compatibility and typical cloud deployments,
-            # actual file permission enforcement is often handled at the deployment
-            # environment level (e.g., Docker, cloud provider settings).
-            # For local Unix-like systems, os.chmod can set permissions.
-            # Example: Owner can read/write, others can only read.
-            # os.chmod(path, 0o644) 
+            # Ensure proper file permissions: owner read/write, others read-only
+            os.chmod(path, 0o644) 
         except IOError as e:
             print(f"Error creating knowledge base file: {e}")
 

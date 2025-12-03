@@ -59,9 +59,10 @@ const ChatWindow: React.FC = () => {
     <div
       className="flex flex-col flex-grow bg-background rounded-lg shadow-md overflow-hidden"
       aria-label="Chat Window"
+      data-testid="chat-window"
     >
       {/* Message history area */}
-      <ScrollArea className="flex-grow p-4" aria-label="Message History">
+      <ScrollArea className="flex-grow p-4" aria-label="Message History" data-testid="message-history">
         {/* Welcome message */}
         <div className="mb-4 text-center text-muted-foreground">
           Welcome to Himolde Study Friend! How can I help you today?
@@ -97,12 +98,13 @@ const ChatWindow: React.FC = () => {
           placeholder="Type your message..."
           className="flex-grow"
           aria-label="Message input"
+          data-testid="message-input"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
         />
         {/* Send button */}
-        <Button aria-label="Send message" onClick={handleSendMessage}>
+        <Button aria-label="Send message" data-testid="send-button" onClick={handleSendMessage}>
           Send
         </Button>
       </div>

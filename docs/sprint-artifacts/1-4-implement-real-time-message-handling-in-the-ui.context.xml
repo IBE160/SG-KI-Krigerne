@@ -1,0 +1,99 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>4</storyId>
+    <title>Implement Real-Time Message Handling in the UI</title>
+    <status>drafted</status>
+    <generatedAt>Wednesday, December 3, 2025</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/1-4-implement-real-time-message-handling-in-the-ui.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>User</asA>
+    <iWant>my messages to appear instantly in the chat window and receive a response</iWant>
+    <soThat>the conversation feels fluid and real-time</soThat>
+    <tasks>
+- [ ] **Task 1: Implement Message Submission Logic (AC: 1, 2, 3, 4)**
+    - [ ] Subtask 1.1: Create a state variable (e.g., `messages`) in the `ChatWindow` component to hold an array of message objects.
+    - [ ] Subtask 1.2: Create a handler function that, when triggered, adds the current input text to the `messages` array.
+    - [ ] Subtask 1.3: Wire up the "Send" button and the Enter key press on the input field to call the handler function.
+    - [ ] Subtask 1.4: Ensure the input field is cleared after submission.
+- [ ] **Task 2: Simulate Bot "Echo" Response (AC: 5)**
+    - [ ] Subtask 2.1: Within the submission handler, use `setTimeout` to create a 500ms delay.
+    - [ ] Subtask 2.2: After the delay, add a new message object to the `messages` array from the "bot" with the same content as the user's message.
+- [ ] **Task 3: Implement Auto-Scrolling (AC: 6)**
+    - [ ] Subtask 3.1: Use a `useRef` on the message history container.
+    - [ ] Subtask 3.2: Use a `useEffect` hook that triggers when the `messages` array changes.
+    - [ ] Subtask 3.3: Inside the effect, scroll the container to the bottom to show the latest message.
+- [ ] **Task 4: Write Frontend Tests**
+    - [ ] Subtask 4.1: Write a unit test to verify that a submitted message is added to the chat history. (AC: 3)
+    - [ ] Subtask 4.2: Write a unit test to verify that the input field is cleared after submission. (AC: 4)
+    - [ ] Subtask 4.3: Write a test to verify the "echo" response appears after a delay. (AC: 5)
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+1.  **Given** the user has typed a message in the chat input,
+2.  **When** they click the "Send" button or press the Enter key,
+3.  **Then** their message is immediately added to the end of the chat message history.
+4.  **And** the text input field is cleared and ready for a new message.
+5.  **And** after a brief, simulated delay (e.g., 500ms), a hardcoded "echo" response from the bot appears in the message history.
+6.  **And** the chat history automatically scrolls to show the newest message.
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+        <doc path="docs/prd.md" title="Product Requirements Document" section="Functional Requirements">
+            <snippet>
+            **FR4:** The user shall receive real-time message delivery from the chatbot.
+            </snippet>
+        </doc>
+        <doc path="docs/architecture.md" title="Architecture" section="Implementation Patterns">
+            <snippet>
+            **Frontend (React/TypeScript):** React Components: Use `PascalCase` (e.g., `ChatWindow`, `CourseCard`). Variables/Functions: Use `camelCase` (e.g., `userName`, `fetchData`). Files: Match the component name (e.g., `ChatWindow.tsx`).
+            </snippet>
+        </doc>
+        <doc path="docs/ux-design-specification.md" title="UX Design Specification" section="Component Library">
+            <snippet>
+            **Chat Message Bubble:** This will be the most critical custom component, handling the display of individual messages.
+            </snippet>
+        </doc>
+        <doc path="docs/epics.md" title="Epic Breakdown" section="Story 1.4">
+            <snippet>
+            As a **User**, I want **my messages to appear instantly in the chat window and receive a response**, so that **the conversation feels fluid and real-time**.
+            </snippet>
+        </doc>
+    </docs>
+    <code>
+        <file path="himolde-study-friend/src/components/ChatWindow.tsx" kind="component" symbol="ChatWindow">
+            <reason>This is the main component to be modified for this story.</reason>
+        </file>
+        <file path="himolde-study-friend/src/components/ChatWindow.test.tsx" kind="test" symbol="ChatWindow.test">
+            <reason>This is the test file for the ChatWindow component, where new tests will be added.</reason>
+        </file>
+    </code>
+    <dependencies>
+        <dependency name="react" version="^19.2.0" />
+        <dependency name="react-dom" version="^19.2.0" />
+        <dependency name="vitest" version="^4.0.15" />
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint>The implementation must happen within the existing `ChatWindow.tsx` component.</constraint>
+    <constraint>No backend interaction is required for this story.</constraint>
+    <constraint>The "echo" response must be a simple client-side simulation.</constraint>
+  </constraints>
+  <interfaces>
+  </interfaces>
+  <tests>
+    <standards>Vitest for fast, modern frontend testing.</standards>
+    <locations>himolde-study-friend/src/components/ChatWindow.test.tsx</locations>
+    <ideas>
+        <idea ac="3">Write a unit test to verify that a submitted message is added to the chat history.</idea>
+        <idea ac="4">Write a unit test to verify that the input field is cleared after submission.</idea>
+        <idea ac="5">Write a test to verify the "echo" response appears after a delay.</idea>
+    </ideas>
+  </tests>
+</story-context>

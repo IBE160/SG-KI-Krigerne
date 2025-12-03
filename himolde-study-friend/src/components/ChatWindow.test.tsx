@@ -83,4 +83,47 @@ describe("ChatWindow", () => {
       expect.any(String),
     ); // Assuming Button component provides aria-label
   });
+
+  describe("Message Submission and Echo", () => {
+    it("adds the message to history and clears input on send button click", async () => {
+      const user = userEvent.setup();
+      render(<ChatWindow />);
+      const inputField = screen.getByPlaceholderText(/type your message/i);
+      const sendButton = screen.getByRole("button", { name: /send/i });
+
+      await user.type(inputField, "A new message");
+      await user.click(sendButton);
+
+      expect(screen.getByText("A new message")).toBeInTheDocument();
+      expect(inputField).toHaveValue("");
+    });
+
+    it("adds the message to history and clears input on Enter key press", async () => {
+      const user = userEvent.setup();
+      render(<ChatWindow />);
+      const inputField = screen.getByPlaceholderText(/type your message/i);
+
+      await user.type(inputField, "Another message{enter}");
+
+      expect(screen.getByText("Another message")).toBeInTheDocument();
+      expect(inputField).toHaveValue("");
+    });
+
+    it("simulates a bot echo response after a short delay", async () => {
+      const user = userEvent.setup();
+      render(<ChatWindow />);
+      const inputField = screen.getByPlaceholderText(/type your message/i);
+
+      await user.type(inputField, "Echo this!{enter}");
+
+      // The user's message appears instantly
+      expect(screen.getByText("Echo this!")).toBeInTheDocument();
+
+      // The bot's echo appears after a delay. findBy... queries wait for appearance.
+      const botEcho = await screen.findByText("Echo this!", {
+        selector: ".bg-muted", // Differentiate from user's message
+      });
+      expect(botEcho).toBeInTheDocument();
+    });
+  });
 });

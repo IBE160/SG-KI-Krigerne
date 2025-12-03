@@ -225,3 +225,13 @@ The testing strategy for this epic will cover multiple levels to ensure code qua
 *   **Accessibility Tests:**
     *   Automated accessibility checks using tools like `axe DevTools` or `Lighthouse` will be integrated into the CI/CD pipeline.
     *   Manual keyboard navigation and screen reader testing will be performed on key UI components to ensure WCAG 2.1 Level AA compliance.
+
+## Post-Review Follow-ups
+
+*   **Story 1.3**:
+    *   Implement robust automated tests for desktop responsiveness (AC5) [file: himolde-study-friend/src/components/ChatWindow.test.tsx]
+    *   Implement robust automated tests for mobile responsiveness (AC6) [file: himolde-study-friend/src/components/ChatWindow.test.tsx]
+    *   Implement robust automated tests for keyboard navigation accessibility (AC7) [file: himolde-study-friend/src/components/ChatWindow.test.tsx]
+    *   Implement robust automated tests for color contrast accessibility (AC8) [file: himolde-study-friend/src/components/ChatWindow.test.tsx]
+    *   Implement robust automated tests for `aria-labels` accessibility (AC9) [file: himolde-study-friend/src/components/ChatWindow.test.tsx]
+

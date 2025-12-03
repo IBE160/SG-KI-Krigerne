@@ -6,8 +6,8 @@ import ChatWindow from "./ChatWindow";
 // Extend Vitest with DOM-specific assertions from @testing-library/jest-dom
 import "@testing-library/jest-dom";
 
-describe("ChatWindow", () => {
-  it("renders correctly with message history area, input field, and send button", () => {
+describe("ChatWindow @p0", () => {
+  it("renders correctly with message history area, input field, and send button @p0 @smoke", () => {
     render(<ChatWindow />);
 
     // Check if the chat window is displayed (AC 3)
@@ -84,7 +84,7 @@ describe("ChatWindow", () => {
     ); // Assuming Button component provides aria-label
   });
 
-  describe("Message Submission and Echo", () => {
+  describe("Message Submission and Echo @p1", () => {
     it("adds the message to history and clears input on send button click", async () => {
       const user = userEvent.setup();
       render(<ChatWindow />);

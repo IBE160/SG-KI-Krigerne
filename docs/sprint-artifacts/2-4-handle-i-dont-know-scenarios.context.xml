@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Story Context for: 2.4 - Handle "I Don't Know" Scenarios -->
+<story-context>
+  <story-metadata>
+    <id>2.4</id>
+    <key>2-4-handle-i-dont-know-scenarios</key>
+    <title>Handle "I Don't Know" Scenarios</title>
+    <status>drafted</status>
+    <user-story>
+      <as-a>User</as-a>
+      <i-want>the chatbot to tell me when it doesn't know the answer</i-want>
+      <so-that>I am not misled and know I need to look elsewhere</so-that>
+    </user-story>
+  </story-metadata>
+  <acceptance-criteria>
+    <criterion id="1">
+      <description>Given the retrieval component (from Story 2.2) returns a "not found" signal</description>
+    </criterion>
+    <criterion id="2">
+      <description>When the generation component (from Story 2.3) is invoked</description>
+    </criterion>
+    <criterion id="3">
+      <description>Then it shall create a polite and clear "I don't know" response (e.g., "I'm sorry, I couldn't find the information for that course. You may want to check the official course page.")</description>
+    </criterion>
+    <criterion id="4">
+      <description>And this "I don't know" response shall be displayed to the user in the chat window, adhering to the "Structured Clarity" design for assistant messages.</description>
+    </criterion>
+  </acceptance-criteria>
+  <tasks>
+    <task id="1">
+      <description>Enhance Generation Component for "Not Found" Scenarios (backend/src/rag/)</description>
+      <subtasks>
+        <subtask>[ ] Modify the generation component (`generator.py`) to accept the "not found" signal from the retrieval component.</subtask>
+        <subtask>[ ] Implement logic to, upon receiving the "not found" signal, bypass the Gemini API and return a predefined, polite "I don't know" message.</subtask>
+        <subtask>[ ] Ensure this message is formatted as a standard conversational response.</subtask>
+      </subtasks>
+      <acceptance-criteria-ref>1, 2, 3</acceptance-criteria-ref>
+    </task>
+    <task id="2">
+      <description>Integrate "Not Found" Logic into Chat Service (backend/src/api/)</description>
+      <subtasks>
+        <subtask>[ ] Ensure the main chat service orchestrator correctly passes the "not found" signal from the retriever to the generator.</subtask>
+        <subtask>[ ] Verify that the streaming endpoint (`chat_api.py`) correctly handles and streams the "I don't know" response generated.</subtask>
+      </subtasks>
+      <acceptance-criteria-ref>from Story 2.3</acceptance-criteria-ref>
+    </task>
+    <task id="3">
+      <description>Unit Tests for "I Don't Know" Logic (backend/tests/)</description>
+      <subtasks>
+        <subtask>[ ] Write unit tests for `backend/src/rag/generator.py` to verify that it produces the correct "I don't know" message when the "not found" signal is provided.</subtask>
+        <subtask>[ ] Test that it does NOT call the Gemini API in this scenario.</subtask>
+      </subtasks>
+      <acceptance-criteria-ref>3</acceptance-criteria-ref>
+    </task>
+    <task id="4">
+      <description>Integration Tests for "I Don't Know" Flow (backend/tests/)</description>
+      <subtasks>
+        <subtask>[ ] Write an integration test for the `/chat` endpoint that simulates the retriever returning "not found".</subtask>
+        <subtask>[ ] Verify that the streamed response from the API is the expected "I don't know" message.</subtask>
+      </subtasks>
+      <acceptance-criteria-ref>4</acceptance-criteria-ref>
+    </task>
+    <task id="5">
+      <description>Frontend Integration Tests (frontend/tests/)</description>
+      <subtasks>
+        <subtask>[ ] Write a test to ensure the frontend correctly displays the "I don't know" message received from the backend.</subtask>
+        <subtask>[ ] Verify the message is styled correctly as an assistant message.</subtask>
+      </subtasks>
+      <acceptance-criteria-ref>4</acceptance-criteria-ref>
+    </task>
+    <task id="6">
+      <description>Streaming Endpoint Verification (backend/tests/)</description>
+      <subtasks>
+        <subtask>[ ] Write a test to confirm the "I don't know" response is delivered in the correct streaming JSON format (`{ "type": "chunk", "content": "..." }` followed by `{ "type": "done" }`).</subtask>
+      </subtasks>
+      <acceptance-criteria-ref>from Story 2.3</acceptance-criteria-ref>
+    </task>
+  </tasks>
+  <tests>
+    <standards>
+      The project adheres to a comprehensive testing strategy. Backend unit and integration tests are written using Pytest, leveraging FastAPI's TestClient for API endpoint validation. Frontend tests are implemented with Vitest and React Testing Library for UI components and user interaction flows. All tests aim for high coverage and directly validate Acceptance Criteria.
+    </standards>
+    <locations>
+      <location>backend/tests/</location>
+      <location>frontend/tests/</location>
+    </locations>
+    <ideas>
+      <test-idea ac-ref="3">
+        <description>Verify `generator.py` produces correct "I don't know" message when "not found" signal is received, and does not call Gemini API.</description>
+        <type>Unit</type>
+        <component>backend/src/rag/generator.py</component>
+      </test-idea>
+      <test-idea ac-ref="4">
+        <description>Simulate retriever returning "not found" signal via `/chat` endpoint and verify the streamed "I don't know" message is correctly formatted.</description>
+        <type>Integration</type>
+        <component>backend/src/api/chat_api.py</component>
+      </test-idea>
+      <test-idea ac-ref="4">
+        <description>Verify the frontend displays the "I don't know" message correctly, adhering to assistant message styling.</description>
+        <type>Frontend Integration</type>
+        <component>frontend/src/components/</component>
+      </test-idea>
+      <test-idea ac-ref="from Story 2.3">
+        <description>Confirm the "I don't know" response is delivered in the correct streaming JSON format (`{ "type": "chunk", "content": "..." }` followed by `{ "type": "done" }`).</description>
+        <type>Integration</type>
+        <component>backend/src/api/chat_api.py</component>
+      </test-idea>
+    </ideas>
+  </tests>
+  <dev-notes>
+    <section title="Architecture patterns and constraints">
+      <note>This story reinforces the AI Safety principle of the architecture by preventing the LLM from hallucinating an answer when no grounding data is found.</note>
+      <note>The "I don't know" response should be a hardcoded template to ensure consistency and prevent unexpected variations from the LLM.</note>
+      <note>The testing strategy for this epic is outlined in `docs/sprint-artifacts/tech-spec-epic-2.md`. All tests should adhere to the standards and frameworks (Pytest, Vitest) defined therein.</note>
+    </section>
+    <section title="Project Structure Notes">
+      <note>All changes for this story are concentrated in the backend, specifically within the `rag` and `api` modules. No frontend changes should be necessary if Story 2.3 was implemented correctly.</note>
+    </section>
+    <section title="Learnings from Previous Story">
+      <subsection title="From Story 2.3: Generate Conversational Responses (Status: done)">
+        <note>New Files Created: `backend/src/rag/generator.py`, `backend/tests/test_generator.py`. The logic in `generator.py` will be modified for this story.</note>
+        <note>Architectural Pattern Established: A clear separation between the retrieval and generation steps of the RAG pipeline is now in place. This story leverages that separation.</note>
+        <note>Pending Items: The Pydantic deprecation warnings noted in story 1.2 still exist and should be monitored.</note>
+        <citation>Source: docs/sprint-artifacts/2-3-generate-conversational-responses.md</citation>
+      </subsection>
+      <subsection title="CRITICAL: Unresolved Review Items from Story 1.3">
+        <note>The following action items from the review of Story 1.3 are still pending and must be considered in future UI-related stories, as they impact the overall quality and accessibility of the chat interface:</note>
+        <note>- [ ] [Medium] Implement robust automated tests for desktop responsiveness</note>
+        <note>- [ ] [Medium] Implement robust automated tests for mobile responsiveness</note>
+        <note>- [ ] [Medium] Implement robust automated tests for keyboard navigation accessibility</note>
+        <note>- [ ] [Medium] Implement robust automated tests for color contrast accessibility</note>
+        <note>- [ ] [Medium] Implement robust automated tests for `aria-labels` accessibility</note>
+      </subsection>
+    </section>
+    <section title="References">
+      <citation>Source: docs/sprint-artifacts/tech-spec-epic-2.md#Story-2.4</citation>
+      <citation>Source: docs/epics.md#Story 2.4: Handle "I Don't Know" Scenarios (MVP)</citation>
+      <citation>Source: docs/prd.md#FR10</citation>
+      <citation>Source: docs/architecture.md#AI Safety</citation>
+    </section>
+  <artifacts>
+    <docs>
+      <doc>
+        <path>docs/prd.md</path>
+        <title>ibe160 - Product Requirements Document</title>
+        <section>Functional Requirements - Course Information Retrieval</section>
+        <snippet>FR10: The system shall indicate when it cannot find an answer to a user's question.</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>Architecture</title>
+        <section>Decision Summary - Cross-cutting: Error Handling</section>
+        <snippet>Backend: Consistent HTTP status codes and JSON error objects ({error: 'message', code: 'SOME_CODE'}).</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>Architecture</title>
+        <section>Decision Summary - Cross-cutting: API response format</section>
+        <snippet>/chat streaming endpoint: SSE/HTTP with JSON chunks ({ "type": "chunk", "content": "..." }) and final ({ "type": "done" }).</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>Architecture</title>
+        <section>AI Application</section>
+        <snippet>Gemini API for LLM integration, PostgreSQL with pgvector for the vector database, and a lightweight custom RAG orchestration flow in the backend for simplicity and direct Gemini API interaction.</snippet>
+      </doc>
+      <doc>
+        <path>docs/ux-design-specification.md</path>
+        <title>ibe160 UX Design Specification</title>
+        <section>6. Empty State Patterns</section>
+        <snippet>No Results: When the bot cannot find an answer to a user's query, it will respond with a polite and informative message within the chat (e.g., "I'm sorry, I couldn't find the information for that. Try rephrasing or ask about another course."), aligning with FR10.</snippet>
+      </doc>
+      <doc>
+        <path>docs/ux-design-specification.md</path>
+        <title>ibe160 UX Design Specification</title>
+        <section>2. Core User Experience - 2.3 Core Experience Principles</section>
+        <snippet>For "I don't know" scenarios, guidance should be clear about what to do next.</snippet>
+      </doc>
+      <doc>
+        <path>docs/epics.md</path>
+        <title>ibe160 - Epic Breakdown</title>
+        <section>Epic 2: Core Question Answering - Story 2.4: Handle "I Don't Know" Scenarios (MVP)</section>
+        <snippet>As a User, I want the chatbot to tell me when it doesn't know the answer, So that I am not misled and know I need to look elsewhere. Acceptance Criteria: Given the retrieval component returned a "not found" signal, When the generation component is invoked, Then it creates a polite and clear "I don't know" response... And the "I don't know" response is displayed to the user in the chat window.</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-2.md</path>
+        <title>Epic Technical Specification: Core Question Answering</title>
+        <section>Objectives and Scope - In-Scope</section>
+        <snippet>"I Don't Know" Scenarios (FR10): The chatbot will politely inform the user when it cannot find a relevant answer in the knowledge base, preventing misleading information.</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-2.md</path>
+        <title>Epic Technical Specification: Core Question Answering</title>
+        <section>Workflows and Sequencing - Backend Processing</section>
+        <snippet>If no relevant information is found (from KB Retrieval): The Generation Module crafts a polite "I don't know" message.</snippet>
+      </doc>
+    </docs>
+    <code>
+      <code-artifact>
+        <path>backend/src/rag/generator.py</path>
+        <kind>Python Module</kind>
+        <symbol>generator.py</symbol>
+        <reason>Contains the response generation logic which needs to be enhanced to handle "not found" scenarios.</reason>
+      </code-artifact>
+      <code-artifact>
+        <path>backend/tests/test_generator.py</path>
+        <kind>Python Module</kind>
+        <symbol>test_generator.py</symbol>
+        <reason>Unit tests for the generator module. New tests will be added to cover "not found" logic.</reason>
+      </code-artifact>
+      <code-artifact>
+        <path>backend/src/api/chat_api.py</path>
+        <kind>Python Module</kind>
+        <symbol>chat_api.py</symbol>
+        <reason>Contains the streaming API endpoint that orchestrates the chat flow and will deliver the "I don't know" response.</reason>
+      </code-artifact>
+    </code>
+    <interfaces>
+      <interface>
+        <name>POST /chat Streaming Endpoint</name>
+        <kind>REST endpoint (Streaming HTTP/SSE)</kind>
+        <signature>POST /chat</signature>
+        <path>backend/src/api/chat_api.py</path>
+        <description>Primary endpoint for user interaction, sending natural language queries and receiving streaming conversational responses. Will now handle "I don't know" messages.</description>
+      </interface>
+    </interfaces>
+    <constraints>
+      <constraint>
+        <type>AI Safety</type>
+        <description>Prevent LLM hallucinations by using a hardcoded response for "I don't know" scenarios when no grounding data is found.</description>
+        <source>docs/architecture.md#AI Safety, docs/sprint-artifacts/tech-spec-epic-2.md#Risks</source>
+      </constraint>
+      <constraint>
+        <type>API Response Format</type>
+        <description>Streaming responses via SSE/HTTP with JSON chunks ({ "type": "chunk", "content": "..." }) and final ({ "type": "done" }).</description>
+        <source>docs/architecture.md#API Contracts</source>
+      </constraint>
+      <constraint>
+        <type>Testing Requirements</type>
+        <description>Adhere to the testing strategy outlined in `docs/sprint-artifacts/tech-spec-epic-2.md`, utilizing Pytest for backend and Vitest for frontend.</description>
+        <source>docs/sprint-artifacts/tech-spec-epic-2.md#Test Strategy Summary</source>
+      </constraint>
+    </constraints>
+    <dependencies>
+      <dependency>
+        <name>fastapi</name>
+        <version>0.122.0</version>
+        <ecosystem>Python</ecosystem>
+      </dependency>
+      <dependency>
+        <name>uvicorn</name>
+        <version>0.27.0.post1</version>
+        <ecosystem>Python</ecosystem>
+      </dependency>
+      <dependency>
+        <name>pydantic</name>
+        <version>2.7.4</version>
+        <ecosystem>Python</ecosystem>
+      </dependency>
+      <dependency>
+        <name>pytest</name>
+        <version>8.0.0</version>
+        <ecosystem>Python</ecosystem>
+      </dependency>
+      <dependency>
+        <name>pytest-mock</name>
+        <version>3.15.1</version>
+        <ecosystem>Python</ecosystem>
+      </dependency>
+      <dependency>
+        <name>react</name>
+        <version>^19.2.0</version>
+        <ecosystem>JavaScript/TypeScript</ecosystem>
+      </dependency>
+      <dependency>
+        <name>react-dom</name>
+        <version>^19.2.0</version>
+        <ecosystem>JavaScript/TypeScript</ecosystem>
+      </dependency>
+      <dependency>
+        <name>vite</name>
+        <version>^7.2.4</version>
+        <ecosystem>JavaScript/TypeScript</ecosystem>
+      </dependency>
+      <dependency>
+        <name>typescript</name>
+        <version>~5.9.3</version>
+        <ecosystem>JavaScript/TypeScript</ecosystem>
+      </dependency>
+      <dependency>
+        <name>tailwindcss</name>
+        <version>^4.1.17</version>
+        <ecosystem>JavaScript/TypeScript</ecosystem>
+      </dependency>
+      <dependency>
+        <name>vitest</name>
+        <version>^4.0.15</version>
+        <ecosystem>JavaScript/TypeScript</ecosystem>
+      </dependency>
+    </dependencies>
+  </artifacts>
+</story-context>

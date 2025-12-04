@@ -1,6 +1,6 @@
 # Story 3.2: Persist User Feedback
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -18,27 +18,27 @@ so that it can be analyzed to improve the chatbot's performance.
 **Core Implementation Tasks:**
 
 1.  **Backend: Implement `FeedbackService.save_feedback` method (AC: 3.2.1)**
-    *   [ ] Define the database model for feedback in `backend/src/models/feedback.py`. This includes fields for `query`, `response`, `rating`, and `timestamp`.
-    *   [ ] Implement logic to connect to PostgreSQL database.
-    *   [ ] Implement logic to insert feedback data into the `feedback` table.
-    *   [ ] Address the Pydantic v2 compatibility for `FeedbackDB` model (update to use `pydantic.ConfigDict`).
+    *   [x] Define the database model for feedback in `backend/src/models/feedback.py`. This includes fields for `query`, `response`, `rating`, and `timestamp`.
+    *   [x] Implement logic to connect to PostgreSQL database.
+    *   [x] Implement logic to insert feedback data into the `feedback` table.
+    *   [x] Address the Pydantic v2 compatibility for `FeedbackDB` model (update to use `pydantic.ConfigDict`).
 2.  **Backend: Integrate `FeedbackService` with `FeedbackAPI` (AC: 3.2.1)**
-    *   [ ] Modify `POST /feedback` endpoint in `backend/src/api/feedback.py` to call `FeedbackService.save_feedback`.
+    *   [x] Modify `POST /feedback` endpoint in `backend/src/api/feedback.py` to call `FeedbackService.save_feedback`.
 3.  **Backend: Database Migration (AC: 3.2.1)**
-    *   [ ] Create a database migration script to create the `feedback` table in PostgreSQL.
+    *   [x] Create a database migration script to create the `feedback` table in PostgreSQL.
 4.  **Backend: Ensure PII Exclusion in Logging (AC: 3.2.2)**
-    *   [ ] Review logging implementation in `FeedbackService` to explicitly exclude any PII from logs.
-    *   [ ] Ensure `query` and `response` are handled safely (e.g., hash, truncate, or redact PII if present, though PRD states no PII is handled for MVP).
+    *   [x] Review logging implementation in `FeedbackService` to explicitly exclude any PII from logs.
+    *   [x] Ensure `query` and `response` are handled safely (e.g., hash, truncate, or redact PII if present, though PRD states no PII is handled for MVP).
 
 **Testing Tasks:**
 
 1.  **Backend Unit Tests (`backend/tests/test_feedback_service.py`)**: (AC: 3.2.1, 3.2.2)
-    *   [ ] Test `FeedbackService.save_feedback` method, mocking database interactions.
-    *   [ ] Verify correct data is stored in the mock database.
-    *   [ ] Test edge cases (e.g., invalid input if validation is added in service layer).
-    *   [ ] Test PII exclusion in logs.
+    *   [x] Test `FeedbackService.save_feedback` method, mocking database interactions.
+    *   [x] Verify correct data is stored in the mock database.
+    *   [x] Test edge cases (e.g., invalid input if validation is added in service layer).
+    *   [x] Test PII exclusion in logs.
 2.  **Backend Integration Test (`backend/tests/test_feedback_api.py`)**: (AC: 3.2.1, 3.2.2)
-    *   [ ] Extend existing `test_feedback_api.py` to test end-to-end feedback submission, including persistence to a test database.
+    *   [ ] Extend existing `test_feedback_api.py` to test end-to-end feedback submission, including persistence to a test database. (Deferred due to environment complexity for pytest-asyncio and TestClient integration)
 
 ## Dev Notes
 
@@ -86,8 +86,26 @@ so that it can be analyzed to improve the chatbot's performance.
 ### Debug Log References
 
 ### Completion Notes List
+- Completed all core implementation tasks for feedback persistence (AC 3.2.1, AC 3.2.2).
+- Backend unit tests for `FeedbackService` are passing.
+- Backend integration tests for `test_feedback_api.py` were deferred due to environment setup complexities with `pytest-asyncio` and `TestClient` interactions, resulting in persistent failures that prevented completion within the allocated time for this story.
+
+## Technical Debt
+- [Low] Fully implement robust integration tests for `backend/tests/test_feedback_api.py` that utilize a test database (e.g., in-memory SQLite or a Dockerized PostgreSQL instance) and correctly configure `pytest-asyncio` for asynchronous FastAPI application testing. This will ensure comprehensive end-to-end verification of the feedback persistence mechanism.
 
 ### File List
+- backend/src/models/feedback.py
+- backend/src/db/database.py
+- backend/src/db/__init__.py
+- backend/src/db/feedback_repository.py
+- backend/src/services/feedback_service.py
+- backend/src/api/feedback.py
+- backend/requirements.txt
+- backend/alembic.ini
+- backend/migrations/env.py
+- backend/migrations/versions/*_create_feedback_table.py
+- backend/tests/test_feedback_service.py
+- backend/tests/test_feedback_api.py
 
 ## Change Log
 

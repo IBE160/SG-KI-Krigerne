@@ -45,7 +45,7 @@ def test_create_knowledge_base_if_not_exists_does_not_overwrite(tmp_path):
     """Test that the knowledge base file is not overwritten if it already exists."""
     temp_kb_path = tmp_path / "temp_knowledge_base.json"
     # Create a dummy file with content
-    existing_content = [{"course_code": "EXIST101", "learning_outcomes": "Existing data", "exam_format": "Oral", "mandatory_assignments": "None"}]
+    existing_content = [{"course_code": "EXIST101", "name": "Existing Course", "learning_outcomes": "Existing data", "exam_format": "Oral", "mandatory_assignments": "None"}]
     with open(temp_kb_path, "w", encoding="utf-8") as f:
         json.dump(existing_content, f)
 
@@ -60,8 +60,8 @@ def test_load_knowledge_base_loads_valid_json_and_parses_courses(tmp_path):
     """Test that a valid JSON file is loaded and parsed into Course objects."""
     temp_kb_path = tmp_path / "temp_knowledge_base.json"
     valid_data = [
-        {"course_code": "TEST101", "learning_outcomes": "LO1", "exam_format": "Exam", "mandatory_assignments": "Assignment1"},
-        {"course_code": "TEST102", "learning_outcomes": "LO2", "exam_format": "Project", "mandatory_assignments": "Assignment2"}
+        {"course_code": "TEST101", "name": "Test Course 1", "learning_outcomes": "LO1", "exam_format": "Exam", "mandatory_assignments": "Assignment1"},
+        {"course_code": "TEST102", "name": "Test Course 2", "learning_outcomes": "LO2", "exam_format": "Project", "mandatory_assignments": "Assignment2"}
     ]
     with open(temp_kb_path, "w", encoding="utf-8") as f:
         json.dump(valid_data, f)
@@ -106,6 +106,7 @@ def test_load_knowledge_base_retrieves_dummy_course_data():
     if not current_kb: # Only add if empty after initial creation/load
         dummy_course = Course(
             course_code="TDT4140",
+            name="Software Engineering",
             learning_outcomes="The student has deep knowledge of software design principles and patterns...",
             exam_format="4-hour written digital exam",
             mandatory_assignments="3 out of 4 assignments must be approved."

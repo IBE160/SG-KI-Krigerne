@@ -62,14 +62,14 @@ def test_generate_response_mandatory_assignments_found(sample_parsed_query_manda
 def test_generate_response_info_not_found(sample_parsed_query):
     """Tests generating a response when information is not found (retrieved_info is None)."""
     retrieved_info = None
-    expected_response = "I'm sorry, I couldn't find information about the exam format for TDT4140."
+    expected_response = "I'm sorry, I couldn't find the information for that course. You may want to check the official course page."
     actual_response = generate_response(sample_parsed_query, retrieved_info)
     assert actual_response == expected_response
 
 def test_generate_response_no_course_code_info_not_found(sample_parsed_query_no_course):
     """Tests generating a response when no course code and info is not found."""
     retrieved_info = None
-    expected_response = "I'm sorry, I couldn't find information about the exam format for the specified course."
+    expected_response = "I'm sorry, I couldn't find the information for that course. You may want to check the official course page."
     actual_response = generate_response(sample_parsed_query_no_course, retrieved_info)
     assert actual_response == expected_response
 

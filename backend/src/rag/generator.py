@@ -23,8 +23,9 @@ def generate_response(parsed_query: ParsedQuery, retrieved_information: Optional
     course_code = parsed_query.course_code.upper() if parsed_query.course_code else "the specified course"
 
     if retrieved_information is None:
-        information_type = INTENT_TO_FRIENDLY_NAME.get(parsed_query.intent, "the requested information")
-        return f"I'm sorry, I couldn't find information about the {information_type} for {course_code}."
+        return "I'm sorry, I couldn't find the information for that course. You may want to check the official course page."
+
+
 
     if parsed_query.intent == "get_learning_outcomes":
         return f"The learning outcomes for {course_code} are: {retrieved_information}"

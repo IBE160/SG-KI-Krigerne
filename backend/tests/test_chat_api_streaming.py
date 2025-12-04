@@ -15,13 +15,13 @@ def mock_dependencies():
     """
     Fixture to mock the dependencies for the chat endpoint.
     """
-    with patch("src.api.chat.load_knowledge_base") as mock_load_kb, \
-         patch("src.api.chat.parse_query") as mock_parse_query, \
+    with patch("src.api.chat.parse_query") as mock_parse_query, \
          patch("src.api.chat.retrieve_knowledge") as mock_retrieve_knowledge, \
          patch("src.api.chat.generate_response") as mock_generate_response:
         
         # Configure mocks
-        mock_load_kb.return_value = MagicMock() # Return a mock knowledge base
+        # Mock knowledge_base object to be accessed by chat_endpoint
+        client.app.state.knowledge_base = MagicMock()
         
         mock_parsed_query = MagicMock()
         mock_parsed_query.course_code = "TDT4140"
@@ -32,7 +32,6 @@ def mock_dependencies():
         mock_generate_response.return_value = "The exam format for TDT4140 is: 4-hour written exam"
         
         yield {
-            "load_knowledge_base": mock_load_kb,
             "parse_query": mock_parse_query,
             "retrieve_knowledge": mock_retrieve_knowledge,
             "generate_response": mock_generate_response,
@@ -67,7 +66,6 @@ def test_chat_endpoint_streaming_success(mock_dependencies):
     mock_dependencies["parse_query"].assert_called_once()
     mock_dependencies["retrieve_knowledge"].assert_called_once()
     mock_dependencies["generate_response"].assert_called_once()
-    mock_dependencies["load_knowledge_base"].assert_called_once()
 
 
 def test_chat_endpoint_streaming_no_info_found(mock_dependencies):
@@ -75,7 +73,7 @@ def test_chat_endpoint_streaming_no_info_found(mock_dependencies):
     Test that the /chat endpoint streams an "information not found" response.
     """
     mock_dependencies["retrieve_knowledge"].return_value = None
-    mock_dependencies["generate_response"].return_value = "I'm sorry, I couldn't find information about the exam format for TDT4140."
+    mock_dependencies["generate_response"].return_value = "I'm sorry, I couldn't find the information for that course. You may want to check the official course page."
 
     response = client.post(
         "/chat",
@@ -94,7 +92,7 @@ def test_chat_endpoint_streaming_no_info_found(mock_dependencies):
     
     assert len(received_chunks) == 2
     assert received_chunks[0]["type"] == "chunk"
-    assert received_chunks[0]["content"] == "I'm sorry, I couldn't find information about the exam format for TDT4140."
+    assert received_chunks[0]["content"] == "I'm sorry, I couldn't find the information for that course. You may want to check the official course page."
     assert received_chunks[1]["type"] == "done"
 
     mock_dependencies["retrieve_knowledge"].assert_called_once()

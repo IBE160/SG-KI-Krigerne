@@ -49,7 +49,7 @@ development_status:
   2-1-implement-natural-language-query-input: done
   2-2-implement-knowledge-base-retrieval: done
   2-3-generate-conversational-responses: done
-  2-4-handle-i-dont-know-scenarios: ready-for-dev
+  2-4-handle-i-dont-know-scenarios: done
   epic-2-retrospective: optional
 
   epic-3: backlog

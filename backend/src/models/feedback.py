@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from uuid import UUID as PyUUID, uuid4 # Import uuid4
 from datetime import datetime, timezone # Import timezone
 from sqlalchemy import Column, Integer, String, DateTime
@@ -24,8 +24,7 @@ class FeedbackDB(FeedbackBase):
     timestamp: datetime
     session_id: PyUUID | None = None
 
-    class Config:
-        orm_mode = True # Use orm_mode for Pydantic v1 compatibility
+    model_config = ConfigDict(from_attributes=True)
 
 # SQLAlchemy ORM model for the 'feedback' table
 class Feedback(Base):

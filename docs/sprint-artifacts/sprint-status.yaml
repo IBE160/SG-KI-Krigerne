@@ -55,5 +55,5 @@ development_status:
 
   epic-3: contexted
   3-1-implement-user-feedback-mechanism-in-ui: done
-  3-2-persist-user-feedback: review
+  3-2-persist-user-feedback: in-progress
   epic-3-retrospective: optional

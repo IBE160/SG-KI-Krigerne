@@ -53,7 +53,7 @@ development_status:
   2-4-handle-i-dont-know-scenarios: done
   epic-2-retrospective: completed
 
-  epic-3: backlog
-  3-1-implement-user-feedback-mechanism-in-ui: backlog
+  epic-3: contexted
+  3-1-implement-user-feedback-mechanism-in-ui: ready-for-dev
   3-2-persist-user-feedback: backlog
   epic-3-retrospective: optional

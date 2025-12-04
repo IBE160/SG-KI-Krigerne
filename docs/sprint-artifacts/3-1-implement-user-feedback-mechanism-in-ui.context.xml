@@ -1,0 +1,162 @@
+<story-context id="{bmad_folder}/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>3</epicId>
+    <storyId>3.1</storyId>
+    <title>Implement User Feedback Mechanism in UI</title>
+    <status>drafted</status>
+    <generatedAt>Thursday, December 4, 2025</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/3-1-implement-user-feedback-mechanism-in-ui.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>User</asA>
+    <iWant>to easily provide feedback on the chatbot's answers</iWant>
+    <soThat>the system can be improved</soThat>
+    <tasks>
+      <task ac_ids="3.1.1, 3.1.2, 3.1.3" description="Frontend: Implement FeedbackDisplay Component (frontend/src/components/FeedbackDisplay.tsx)">
+        <subtask description="Render 👍 and 👎 icons next to each bot message."/>
+        <subtask description="Implement click handlers for both icons to capture rating (1 or -1), query, and response."/>
+        <subtask description="Integrate with ApiClient to send feedback to POST /feedback."/>
+        <subtask description="Update UI state to reflect feedback submission (e.g., disable icons, show 'Thank you')."/>
+      </task>
+      <task ac_ids="3.1.2" description="Frontend: Extend ApiClient (frontend/src/lib/api-client.ts)">
+        <subtask description="Add sendFeedback(feedbackData: FeedbackData) method to make POST request to /feedback endpoint."/>
+      </task>
+      <task ac_ids="3.1.2" description="Backend: Create FeedbackAPI Endpoint (backend/src/api/feedback.py)">
+        <subtask description="Define POST /feedback endpoint."/>
+        <subtask description="Implement request body validation using FeedbackCreate Pydantic model."/>
+        <subtask description="Call FeedbackService to process and persist feedback (actual persistence handled by Story 3.2)."/>
+      </task>
+      <task ac_ids="3.1.1, 3.1.3" description="Testing: Frontend Unit Tests (frontend/tests/FeedbackDisplay.test.tsx - TBD naming)">
+        <subtask description="Test rendering of feedback icons."/>
+        <subtask description="Test UI state changes after feedback (icons disabled/thank you message)."/>
+        <subtask description="Mock ApiClient.sendFeedback to verify calls."/>
+      </task>
+      <task ac_ids="3.1.2" description="Testing: Backend Unit Tests (backend/tests/test_feedback_api.py)">
+        <subtask description="Test POST /feedback endpoint request validation."/>
+        <subtask description="Mock FeedbackService to verify correct calls."/>
+      </task>
+      <task ac_ids="3.1.1, 3.1.2, 3.1.3" description="Testing: Frontend Integration Test">
+        <subtask description="Simulate a full feedback submission flow from UI click to backend call (mocking backend response)."/>
+        <subtask description="Verify end-to-end user experience."/>
+      </task>
+      <task ac_ids="3.1.1, 3.1.3" description="Testing: Accessibility Testing for FeedbackDisplay (Automated/Manual)">
+        <subtask description="Verify keyboard navigation for feedback icons."/>
+        <subtask description="Check for proper aria-labels on icons."/>
+        <subtask description="Ensure sufficient color contrast for feedback elements."/>
+        <subtask description="Test responsiveness of feedback elements on desktop/mobile."/>
+      </task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <ac id="3.1.1" description="Given a chatbot response is displayed, when the response is rendered, then 'thumbs up' (👍) and 'thumbs down' (👎) icons are displayed next to the response."/>
+    <ac id="3.1.2" description="Given 'thumbs up' or 'thumbs down' icons are displayed, when a user clicks either icon, then a feedback signal is sent to the backend."/>
+    <ac id="3.1.3" description="Given feedback has been sent, when the icons are displayed, then they change state (e.g., become greyed out or show a 'Thank you' message) to indicate feedback was received."/>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc path="docs/prd.md" title="Product Requirements Document" section="Functional Requirements" snippet="FR5: The user can provide feedback on the helpfulness of the chatbot's answers."/>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-3.md" title="Epic Technical Specification: User Feedback Loop" section="Detailed Design" snippet="Describes Frontend FeedbackDisplay component, Backend FeedbackAPI endpoint, FeedbackService, FeedbackRepository."/>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-3.md" title="Epic Technical Specification: User Feedback Loop" section="Data Models and Contracts" snippet="Defines PostgreSQL Feedback table, Pydantic models for backend, and TypeScript interface for frontend feedback data."/>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-3.md" title="Epic Technical Specification: User Feedback Loop" section="APIs and Interfaces" snippet="Specifies POST /feedback endpoint with request/response schemas and frontend API client interface."/>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-3.md" title="Epic Technical Specification: User Feedback Loop" section="Workflows and Sequencing" snippet="Details the step-by-step user feedback submission workflow."/>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-3.md" title="Epic Technical Specification: User Feedback Loop" section="Non-Functional Requirements" snippet="Addresses performance, security, reliability, and observability related to feedback mechanism."/>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-3.md" title="Epic Technical Specification: User Feedback Loop" section="Dependencies and Integrations" snippet="Enumerates frontend and backend dependencies for feedback implementation."/>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-3.md" title="Epic Technical Specification: User Feedback Loop" section="Acceptance Criteria (Authoritative)" snippet="Lists ACs for Story 3.1 (AC 3.1.1, 3.1.2, 3.1.3)."/>
+      <doc path="docs/sprint-artifacts/tech-spec-epic-3.md" title="Epic Technical Specification: User Feedback Loop" section="Traceability Mapping" snippet="Maps ACs to spec sections, components, and test ideas for Story 3.1."/>
+      <doc path="docs/architecture.md" title="Architecture" section="Decision Summary" snippet="Covers Frontend (Vite + React, Tailwind, shadcn/ui), Backend (FastAPI, Python), Data Persistence (PostgreSQL), Real-time Comm (SSE)."/>
+      <doc path="docs/ux-design-specification.md" title="ibe160 UX Design Specification" section="Design System Foundation" snippet="Choice of shadcn/ui (v0.8.0) and its rationale."/>
+      <doc path="docs/ux-design-specification.md" title="ibe160 UX Design Specification" section="Core User Experience" snippet="Defining experience, emotional response, core principles (Speed, Guidance, Flexibility, Feedback)."/>
+      <doc path="docs/ux-design-specification.md" title="ibe160 UX Design Specification" section="Design Direction" snippet="Chosen Direction 2: 'Structured Clarity' and its rationale for layout, hierarchy, interaction, and visual style."/>
+      <doc path="docs/ux-design-specification.md" title="ibe160 UX Design Specification" section="UX Pattern Decisions" snippet="Consistency Rules for Button Hierarchy, Feedback Patterns, Form Patterns, Modal Patterns, Empty State Patterns, Notification Patterns, Search Patterns."/>
+      <doc path="docs/ux-design-specification.md" title="ibe160 UX Design Specification" section="Responsive Design & Accessibility" snippet="Responsive Strategy (Desktop, Tablet, Mobile) and WCAG 2.1 Level AA Accessibility Strategy."/>
+      <doc path="docs/epics.md" title="Epics Summary" section="Epic 3: User Feedback Loop" snippet="Goal, Value, and Sequencing of Epic 3."/>
+      <doc path="docs/epics.md" title="Epics Summary" section="Story 3.1: Implement User Feedback Mechanism in UI (MVP)" snippet="User story and Acceptance Criteria for Story 3.1."/>
+    </docs>
+    <code>
+      <artifact path="frontend/src/components/FeedbackDisplay.tsx" kind="component" reason="New component for displaying feedback icons and handling user interaction."/>
+      <artifact path="frontend/src/lib/api-client.ts" kind="utility" reason="Modification to add sendFeedback method for backend communication."/>
+      <artifact path="backend/src/api/feedback.py" kind="api_endpoint" reason="New file for defining the POST /feedback endpoint."/>
+      <artifact path="backend/src/services/feedback_service.py" kind="service" reason="New service file for feedback processing logic."/>
+      <artifact path="backend/src/models/feedback.py" kind="data_model" reason="New file for Pydantic data models related to feedback."/>
+    </code>
+    <dependencies>
+      <ecosystem name="Frontend">
+        <package name="React" version="^18.2.0"/>
+        <package name="shadcn/ui" version="~0.8.0"/>
+        <package name="Tailwind CSS" version="^3.3.0"/>
+        <package name="Custom API Client" path="frontend/src/lib/api-client.ts"/>
+      </ecosystem>
+      <ecosystem name="Backend (Python)">
+        <package name="FastAPI" version="^0.122.0"/>
+        <package name="Pydantic" version="as per requirements.txt"/>
+        <package name="SQLAlchemy/asyncpg" version="as per requirements.txt"/>
+        <package name="psycopg2" version="as per requirements.txt"/>
+      </ecosystem>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint kind="architectural_pattern" reason="Reinforces established system architecture (React SPA with shadcn/ui/Tailwind CSS, Python REST API with FastAPI, PostgreSQL) and communication patterns (REST API calls).">
+      Established Frontend/Backend architecture.
+    </constraint>
+    <constraint kind="nfr_performance" reason="UI update to acknowledge feedback must be within 100ms. Backend POST /feedback response time within 500ms.">
+      Fast UI responsiveness and efficient backend processing.
+    </constraint>
+    <constraint kind="nfr_security" reason="No PII in feedback data, rate-limiting on endpoint, least privilege for DB access.">
+      Data privacy and endpoint protection.
+    </constraint>
+    <constraint kind="nfr_reliability" reason="Feedback mechanism must be highly available and gracefully degrade without affecting primary chatbot function.">
+      High availability and graceful degradation.
+    </constraint>
+    <constraint kind="nfr_observability" reason="Logging of INFO for success, ERROR for failures, with traceability.">
+      Comprehensive logging for feedback events.
+    </constraint>
+    <constraint kind="technical_debt" reason="Pydantic deprecation warnings in backend/tests/test_knowledge_base_manager.py (replace dict() with model_dump()).">
+      Pydantic deprecation warning from Story 1.2.
+    </constraint>
+    <constraint kind="unresolved_review_item" reason="Automated tests for desktop responsiveness are still pending from Story 1.3.">
+      Implement robust automated tests for desktop responsiveness.
+    </constraint>
+    <constraint kind="unresolved_review_item" reason="Automated tests for mobile responsiveness are still pending from Story 1.3.">
+      Implement robust automated tests for mobile responsiveness.
+    </constraint>
+    <constraint kind="unresolved_review_item" reason="Automated tests for keyboard navigation accessibility are still pending from Story 1.3.">
+      Implement robust automated tests for keyboard navigation accessibility.
+    </constraint>
+    <constraint kind="unresolved_review_item" reason="Automated tests for color contrast accessibility are still pending from Story 1.3.">
+      Implement robust automated tests for color contrast accessibility.
+    </constraint>
+    <constraint kind="unresolved_review_item" reason="Automated tests for aria-labels accessibility are still pending from Story 1.3.">
+      Implement robust automated tests for aria-labels accessibility.
+    </constraint>
+  </constraints>
+  <interfaces>
+    <interface name="ApiClient.sendFeedback" kind="function_signature" signature="sendFeedback(feedbackData: FeedbackData): Promise<{ message: string }>" path="frontend/src/lib/api-client.ts"/>
+    <interface name="POST /feedback" kind="REST_endpoint" signature="POST /feedback (Request: FeedbackCreate, Response: {message: string})" path="backend/src/api/feedback.py"/>
+  </interfaces>
+  <tests>
+    <standards>
+      <standard framework="Jest/Vitest" type="unit_testing" scope="frontend" details="Mocking API calls for component isolation."/>
+      <standard framework="Pytest" type="unit_testing" scope="backend" details="Mocking services for endpoint and service logic isolation."/>
+      <standard type="integration_testing" scope="frontend_backend" details="Verifying end-to-end communication flow."/>
+      <standard type="accessibility_testing" scope="ui" details="Keyboard navigation, aria-labels, color contrast, responsiveness."/>
+    </standards>
+    <locations>
+      <location path="frontend/tests/" description="Frontend unit and integration tests."/>
+      <location path="backend/tests/" description="Backend unit and integration tests."/>
+      <location path="himolde-study-friend/e2e/" description="Potential location for Playwright/Cypress end-to-end tests."/>
+    </locations>
+    <ideas>
+      <idea ac_id="3.1.1" description="Verify rendering of feedback icons (thumbs up/down) next to bot messages."/>
+      <idea ac_id="3.1.2" description="Test that clicking feedback icons triggers a correct POST /feedback call to the backend."/>
+      <idea ac_id="3.1.3" description="Verify UI state changes after feedback submission (e.g., icons disabled, 'Thank you' message)."/>
+      <idea ac_id="3.1.1, 3.1.3" description="Accessibility: Test keyboard navigation, aria-labels, color contrast, and responsiveness of FeedbackDisplay component."/>
+      <idea ac_id="3.1.2" description="Backend Unit: Test POST /feedback endpoint validation and service call with mocked FeedbackService."/>
+      <idea ac_id="3.1.1, 3.1.2, 3.1.3" description="Frontend Integration: Simulate full feedback submission flow with mocked backend response."/>
+    </ideas>
+  </tests>
+</story-context>

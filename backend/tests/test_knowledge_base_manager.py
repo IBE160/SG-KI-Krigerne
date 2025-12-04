@@ -112,7 +112,7 @@ def test_load_knowledge_base_retrieves_dummy_course_data():
             mandatory_assignments="3 out of 4 assignments must be approved."
         )
         with open(KNOWLEDGE_BASE_PATH, "w", encoding="utf-8") as f:
-            json.dump([dummy_course.dict()], f, indent=2)
+            json.dump([dummy_course.model_dump()], f, indent=2)
         current_kb = load_knowledge_base(KNOWLEDGE_BASE_PATH) # Reload after adding dummy
 
     courses = load_knowledge_base(KNOWLEDGE_BASE_PATH)

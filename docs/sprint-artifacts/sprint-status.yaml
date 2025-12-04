@@ -2,7 +2,7 @@
 # This is an EXAMPLE showing the expected format
 # The actual file will be generated with all epics/stories from your epic files
 
-# generated: Tuesday, December 2, 2025
+# generated: Thursday, December 4, 2025
 # project: ibe160
 # project_key: ibe160
 # tracking_system: file-system
@@ -32,10 +32,11 @@
 # - SM typically drafts next story ONLY after previous one is 'done' to incorporate learnings
 # - Dev moves story to 'review', dev reviews, then Dev moves to 'done'
 
-generated: Tuesday, December 2, 2025
+generated: Thursday, December 4, 2025
 project: ibe160
 project_key: ibe160
-story_location: docs/sprint-artifacts/
+tracking_system: file-system
+story_location: docs/sprint-artifacts
 
 development_status:
   epic-1: contexted
@@ -50,7 +51,7 @@ development_status:
   2-2-implement-knowledge-base-retrieval: done
   2-3-generate-conversational-responses: done
   2-4-handle-i-dont-know-scenarios: done
-  epic-2-retrospective: optional
+  epic-2-retrospective: completed
 
   epic-3: backlog
   3-1-implement-user-feedback-mechanism-in-ui: backlog

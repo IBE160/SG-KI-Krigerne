@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from pathlib import Path
 from src.db.knowledge_base_manager import load_knowledge_base
-from src.api import chat
+from src.api import chat, feedback
 
 # Define the path to the knowledge base
 KNOWLEDGE_BASE_PATH = Path(__file__).parent / "src" / "db" / "knowledge_base.json"
@@ -21,6 +21,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(chat.router)
+app.include_router(feedback.router)
 
 @app.get("/")
 async def root():

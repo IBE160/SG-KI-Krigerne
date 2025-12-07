@@ -1,176 +1,208 @@
 from __future__ import annotations
-
 import os
-from typing import Any, Dict, List, Optional
+import logging
+from typing import List, Dict, Any, Optional
+import json
 
-from openai import OpenAI, OpenAIError
+# *** IMPORTANT CHANGE 1: New Import ***
+# We use 'from google import genai' instead of 'google.generativeai'
+from google import genai 
 
 from backend.src.rag.query_parser import ParsedQuery
 
-# ---- LLM client helpers ----------------------------------------------------
+# ----------------------------------------------------------------------
+# Gemini Configuration (Updated for New SDK)
+# ----------------------------------------------------------------------
 
+logger = logging.getLogger(__name__)
 
-_client: Optional[OpenAI] = None
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
 
+if not GEMINI_API_KEY:
+    raise RuntimeError(
+        "No Gemini API key found. Set GEMINI_API_KEY (or GOOGLE_API_KEY) "
+        "in your environment."
+    )
 
-def get_client() -> Optional[OpenAI]:
-    """
-    Lazily create an OpenAI client if an API key is configured.
+# *** IMPORTANT CHANGE 2: Client Initialization ***
+# 1. DELETE the old 'genai.configure(api_key=...)' call.
+# 2. Create the client object here, passing the API key directly.
+client = genai.Client(api_key=GEMINI_API_KEY) 
 
-    Returns None if OPENAI_API_KEY is not set so the app can still run
-    without an LLM (it will just use a simple fallback answer).
-    """
-    global _client
-    if _client is not None:
-        return _client
+# Recommended High-RPD Model: Gemma 3-2b Instruction-Tuned (14.4K RPD)
+MODEL_NAME = "gemini-2.5-flash-lite" 
 
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        # No key configured -> run in "non-LLM fallback" mode
-        return None
+SYSTEM_PROMPT = """
+You are HiMolde Study Friend, a friendly chatbot that helps students at
+Molde University College (HiMolde) understand their courses.
 
-    _client = OpenAI(api_key=api_key)
-    return _client
-
-
-# ---- Prompt construction ----------------------------------------------------
-
-
-SYSTEM_PROMPT = """You are Himolde Study Friend, a helpful assistant for HiMolde students.
-
-You answer questions about HiMolde courses based on the *Course info* that is
-provided to you. If the supplied course info does not contain the answer, say
-that you do not know and suggest checking the official course page.
-
-Guidelines:
-- Be friendly and concise.
-- Focus on what the student actually asked for (exam format, learning outcomes,
-  mandatory assignments, etc.).
-- Where helpful, give 1–3 short study tips, but do not invent details that are
-  not in the Course info.
+Rules:
+- Only answer questions related to HiMolde courses, learning outcomes,
+  exam formats, and mandatory assignments.
+- When you are given structured course information, use it as the source
+  of truth. Do NOT invent facts that are not in the course info.
+- If the user asks about a course that does not exist in the knowledge
+  base, say you cannot find it and suggest checking the official course
+  pages.
+- Keep answers concise, clear, and student-friendly.
+- You may reference previous turns in the conversation to keep context.
 """
 
+# ----------------------------------------------------------------------
+# Helper functions (Kept exactly as in your original code)
+# ----------------------------------------------------------------------
 
 def _extract_user_query(parsed_query: ParsedQuery) -> str:
     """
-    Best-effort way to get the original text the user typed from ParsedQuery,
-    without depending too hard on its internal structure.
+    Try to recover the raw user question from ParsedQuery.
     """
-    for attr in ("original_query", "raw_query", "query", "text"):
+    # We don't know exactly which attribute name you used in ParsedQuery,
+    # so we try a few common ones and fall back to an empty string.
+    """
+    """
+    for attr in ("original_query", "raw_query", "text", "query", "prompt"):
         if hasattr(parsed_query, attr):
             value = getattr(parsed_query, attr)
             if isinstance(value, str):
                 return value
+    return ""
 
-    # Fallback – not ideal, but at least something printable
-    return str(parsed_query)
-
-
-def _build_messages(
-    parsed_query: ParsedQuery,
-    retrieved_info: Optional[str],
-    history: Optional[List[Dict[str, str]]] = None,
-) -> List[Dict[str, str]]:
+def format_history(history: List[Dict[str, str]]) -> str:
     """
-    Build the messages list for the Chat Completions API.
+    Turn your stored history (list of {'role', 'content'}) into a simple
+    text block for the model. We keep only the last few turns so it
+    doesn't get too long.
     """
-    messages: List[Dict[str, str]] = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-    ]
+    if not history:
+        return "No previous conversation."
 
-    # Add recent conversation history (last few turns is enough)
-    if history:
-        for msg in history[-6:]:
-            role = msg.get("role")
-            content = msg.get("content")
-            if role in {"user", "assistant"} and isinstance(content, str):
-                messages.append({"role": role, "content": content})
+    lines = []
+    # keep the last 6 turns at most
+    for message in history[-6:]:
+        role = message.get("role", "user")
+        content = message.get("content", "")
+        prefix = "Student" if role == "user" else "Assistant"
+        lines.append(f"{prefix}: {content}")
+    return "\n".join(lines)
 
-    # Provide the course information we retrieved (if any)
-    if retrieved_info:
-        messages.append(
-            {
-                "role": "system",
-                "content": f"Course info (from the knowledge base):\n{retrieved_info}",
-            }
-        )
-    else:
-        messages.append(
-            {
-                "role": "system",
-                "content": (
-                    "No specific course info was found for this question. "
-                    "If the user asks for something like exam format or "
-                    "learning outcomes, you probably have to answer that "
-                    "you don't know and suggest checking the official course page."
-                ),
-            }
-        )
-
-    # Current user question
-    user_text = _extract_user_query(parsed_query)
-    messages.append({"role": "user", "content": user_text})
-
-    return messages
-
-
-# ---- Public API -------------------------------------------------------------
-
-
-def generate_response(
+def _format_course_context(
     parsed_query: ParsedQuery,
-    retrieved_info: Optional[str],
-    history: Optional[List[Dict[str, str]]] = None,
+    retrieved_info: Optional[Any],
 ) -> str:
     """
-    Generate a conversational response.
+    Turn whatever 'retrieve_knowledge' returned into plain text.
 
-    If an OpenAI API key is configured, this uses the Chat Completions API.
-    Otherwise it falls back to a simple, template-based answer.
+    This function MUST always return a string—never a dict—otherwise
+    join() will crash with `expected str instance, dict found`.
     """
-    client = get_client()
+    # Nothing found
+    if retrieved_info is None:
+        return ""
 
-    # If no LLM configured, keep your old style of answer so the app still works.
-    if client is None:
-        if retrieved_info:
-            return (
-                "Here is what I found in the course information:\n\n"
-                f"{retrieved_info}\n\n"
-                "If you need more details, you may want to check the official "
-                "course page."
-            )
+    # If the retriever returns a dict like
+    # {"course_code": "ADM120", "name": "LEARNING",
+    # "field": "exam format", "value": "..."}
+    if isinstance(retrieved_info, dict):
+        code = retrieved_info.get("course_code") or parsed_query.course_code or "Unknown course"
+        name = retrieved_info.get("name") or ""
+        field = retrieved_info.get("field")
+        value = retrieved_info.get("value")
+
+        lines = []
+
+        # First line: course name
+        course_line = f"Course: {code} {name}".strip()
+        lines.append(course_line)
+
+        # Second line: specific field/value if we have them
+        if field and value:
+            pretty_field = field.replace("_", " ").title()
+            lines.append(f"{pretty_field}: {value}")
         else:
-            return (
-                "I couldn't find detailed information for that course in my "
-                "knowledge base. You may want to check the official course page."
-            )
+            # Fallback - dump the dict as JSON so we still give Gemini something usable
+            lines.append(json.dumps(retrieved_info, ensure_ascii=False))
+        
+        return "\n".join(lines)
 
-    messages = _build_messages(parsed_query, retrieved_info, history or [])
+    # If it's already a string (or something string-like)
+    return str(retrieved_info)
 
-    model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+# ----------------------------------------------------------------------
+# Public API used by chat.py
+# ----------------------------------------------------------------------
+
+def generate_response(
+    parsed_query: Any,
+    retrieved_info: Optional[str],
+    history: List[Dict[str, str]],
+) -> str:
+    """
+    Generate a conversational answer using Gemini.
+
+    - parsed_query: output from query_parser.parse_query(...)
+    - retrieved_info: string from retrieve_knowledge(...) (may be None)
+    - history: list of messages like {"role": "user"|"assistant", "content": "..."}
+    """
+    user_question = _extract_user_query(parsed_query)
+    conversation_block = format_history(history)
+    course_block = _format_course_context(parsed_query, retrieved_info)
+
+    # This is the single prompt we send to Gemini.
+    prompt = f"""
+You are HiMolde Study Friend.
+
+System instructions:
+{SYSTEM_PROMPT}
+
+Conversation so far:
+{conversation_block}
+
+New student question:
+{user_question}
+
+Structured course information (if any):
+{course_block}
+
+Task:
+Using ONLY the information above, answer the student's question in a
+helpful, concise way. If the course information is missing or incomplete,
+explain that clearly and suggest checking the official HiMolde course
+pages.
+"""
 
     try:
-        completion = client.chat.completions.create(
-            model=model,
-            messages=messages,
-            temperature=0.4,
-            max_completion_tokens=400,
+        # *** IMPORTANT CHANGE 3: The Call Method ***
+        # We now call 'generate_content' on the client's 'models' service
+        response = client.models.generate_content(
+            model=MODEL_NAME, # Uses the high-RPD model defined globally
+            contents=prompt,
+            config=genai.types.GenerateContentConfig(
+                # system_instruction is now part of the contents/prompt template
+                temperature=0.2,
+                max_output_tokens=512,
+            )
         )
-        content = completion.choices[0].message.content
-        return content.strip() if content else "Sorry, I couldn't generate a response."
-    except OpenAIError as e:
-        # Log to console and fall back gracefully
-        print(f"[generator] OpenAIError: {e}")  # you can swap this for proper logging
+
+        # google-generativeai exposes the main text via .text
+        answer = (response.text or "").strip()
+        if not answer:
+            raise ValueError("Empty response from Gemini model")
+        return answer
+    
+    except Exception as e:
+        # Log the technical error, but return a student-friendly message.
+        logger.error(f"Error calling Gemini model: {e}")
 
         if retrieved_info:
+            # We still have something useful from the knowledge base
             return (
-                "There was a problem talking to the language model.\n\n"
-                "Here is the raw course info I have:\n\n"
+                "I couldn't reach the language model right now, but here's the "
+                "information I have from the course database:\n\n"
                 f"{retrieved_info}"
             )
         else:
             return (
-                "There was a problem talking to the language model, and I also "
-                "couldn't find this course in my knowledge base. "
-                "Please try again or check the official course page."
+                "I couldn't reach the language model and I also couldn't find "
+                "this course in my local database. Please double-check the "
+                "course code or check the official HiMolde course pages."
             )

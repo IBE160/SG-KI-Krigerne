@@ -29,14 +29,14 @@ const initialMessages: ChatMessage[] = [
     id: "welcome-2",
     sender: "bot",
     content:
-      "Ask me about courses like ADM120 or MAT100 – learning outcomes, exam format, mandatory assignments, and more.",
+      "Ask me about courses like ADM120 or IBE320 – learning outcomes, exam format, mandatory assignments, and more.",
   },
 ];
 
 const quickPrompts = [
   "Find information about ADM120",
   "What are the learning outcomes for ADM120?",
-  "What is the exam format for MAT100?",
+  "What is the exam format for IBE320?",
 ];
 
 const App: React.FC = () => {

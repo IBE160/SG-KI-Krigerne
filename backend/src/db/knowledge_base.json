@@ -1,1 +1,25 @@
-[]
+{
+  "courses": [
+    {
+      "course_code": "ADM120",
+      "name": "Marketing",
+      "learning_outcomes": "The student will have the following knowledge: Have knowledge and understanding of essential principles of marketing. Have an in-depth understanding of how a firm can achieve competitiveness through the design and implementation of market-responsive programmes",
+      "exam_format": "School assessment, 2 hour long",
+      "mandatory_assignments": "No assignments"
+    },
+    {
+      "course_code": "MAT100",
+      "name": "Math",
+      "learning_outcomes": "...",
+      "exam_format": "Digital Home Exam, 5 hours long",
+      "mandatory_assignments": "12 Mandatory assignments with 2 submission dates"
+    },
+    {
+      "course_code": "ADM715",
+      "name": "Essentials in organization and management",
+      "learning_outcomes": "Upon finishing the course students should have knowledge of essential debates in the field of organization and management science and be able to relate these to key management and organization concepts. Based on this insight, students are expected to make their independent analyses of organization and management designs, systems and processes.",
+      "exam_format": "Open home exam + school exam. 6 Hour school exam. The home exam is to be submitted the same day as the school exam.",
+      "mandatory_assignments": "The course requires a minimum of 75% presence in seminars. Mandatory coursework must be completed the same semester as the course is taught."
+    }
+  ]
+}

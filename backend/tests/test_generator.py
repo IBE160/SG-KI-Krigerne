@@ -1,5 +1,5 @@
-from src.rag.generator import generate_response
-from src.rag.query_parser import ParsedQuery
+from backend.src.rag.generator import generate_response
+from backend.src.rag.query_parser import ParsedQuery
 import pytest
 
 @pytest.fixture

@@ -15,9 +15,9 @@ def mock_dependencies():
     """
     Fixture to mock the dependencies for the chat endpoint.
     """
-    with patch("src.api.chat.parse_query") as mock_parse_query, \
-         patch("src.api.chat.retrieve_knowledge") as mock_retrieve_knowledge, \
-         patch("src.api.chat.generate_response") as mock_generate_response:
+    with patch("backend.src.api.chat.parse_query") as mock_parse_query, \
+         patch("backend.src.api.chat.retrieve_knowledge") as mock_retrieve_knowledge, \
+         patch("backend.src.api.chat.generate_response") as mock_generate_response:
         
         # Configure mocks
         # Mock knowledge_base object to be accessed by chat_endpoint

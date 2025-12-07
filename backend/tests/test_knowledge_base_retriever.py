@@ -2,9 +2,9 @@ import pytest
 from typing import List, Optional
 from pathlib import Path
 
-from src.models.course import Course
-from src.rag.query_parser import ParsedQuery
-from src.rag.knowledge_base_retriever import retrieve_knowledge
+from backend.src.models.course import Course
+from backend.src.rag.query_parser import ParsedQuery
+from backend.src.rag.knowledge_base_retriever import retrieve_knowledge
 
 # Sample course data for testing
 SAMPLE_COURSES = [

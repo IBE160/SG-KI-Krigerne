@@ -1,0 +1,60 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>2</storyId>
+    <title>Design and Implement the Knowledge Base Schema</title>
+    <status>drafted</status>
+    <generatedAt>2025-12-02</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>C:/Users/fredr/Documents/KIProject/SG-KI-Krigerne/docs/sprint-artifacts</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>System</asA>
+    <iWant>a well-defined and structured knowledge base schema</iWant>
+    <soThat>course information can be stored accurately and retrieved efficiently</soThat>
+    <tasks>
+      - Task 1: Define `knowledge_base.json` schema (AC: 3, 4)
+        - Subtask 1.1: Create `knowledge_base.json` in `backend/src/db/`
+        - Subtask 1.2: Define fields for `course_code`, `learning_outcomes`, `exam_format`, `mandatory_assignments`
+      - Task 2: Implement knowledge base creation and loading (AC: 2, 5)
+        - Subtask 2.1: Write script/function to create `knowledge_base.json` if it doesn't exist
+        - Subtask 2.2: Implement logic to load and parse `knowledge_base.json`
+        - Subtask 2.3: Add error handling for JSON parsing
+      - Task 3: Add initial dummy course (AC: 6)
+        - Subtask 3.1: Add a dummy course entry to `knowledge_base.json`
+      - Task 4: Set file permissions (AC: 7)
+        - Subtask 4.1: Research appropriate file permissions for `knowledge_base.json` to prevent unauthorized modification
+        - Subtask 4.2: Implement file permission setting in the creation script/deployment process
+      - Task 5: Write unit/integration tests
+        - Subtask 5.1: Test schema validity
+        - Subtask 5.2: Test loading and parsing of `knowledge_base.json`
+        - Subtask 5.3: Test handling of invalid JSON
+        - Subtask 5.4: Test retrieval of dummy course data
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    1.  **Given** course data needs to be stored,
+    2.  **When** the knowledge base is created,
+    3.  **Then** a JSON file (`knowledge_base.json`) is created with a clear schema.
+    4.  **And** the schema supports fields for `course_code`, `learning_outcomes`, `exam_format`, and `mandatory_assignments`.
+    5.  **And** the system can programmatically load and parse this JSON file without errors.
+    6.  **And** an initial dummy course is added to the file for testing purposes.
+    7.  **And** file permissions are set to prevent unauthorized modification of the knowledge base.
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>{{docs_artifacts}}</docs>
+    <code>{{code_artifacts}}</code>
+    <dependencies>{{dependencies_artifacts}}</dependencies>
+  </artifacts>
+
+  <constraints>{{constraints}}</constraints>
+  <interfaces>{{interfaces}}</interfaces>
+  <tests>
+    <standards>{{test_standards}}</standards>
+    <locations>{{test_locations}}</locations>
+    <ideas>{{test_ideas}}</ideas>
+  </tests>
+</story-context>

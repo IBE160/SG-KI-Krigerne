@@ -45,5 +45,5 @@ validate-architecture: docs/validation-report-2025-11-30.md  # agent: architect
 solutioning-gate-check: docs/implementation-readiness-report-2025-11-30.md  # agent: architect
 
 # Phase 3: Implementation
-sprint-planning: pending  # agent: sm
+sprint-planning: docs/sprint-artifacts/sprint-status.yaml  # agent: sm
 "

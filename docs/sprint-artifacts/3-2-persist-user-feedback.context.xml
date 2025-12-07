@@ -1,0 +1,159 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>3</epicId>
+    <storyId>2</storyId>
+    <title>Persist User Feedback</title>
+    <status>drafted</status>
+    <generatedAt>Thursday, December 4, 2025</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/3-2-persist-user-feedback.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>System</asA>
+    <iWant>to store user feedback</iWant>
+    <soThat>it can be analyzed to improve the chatbot's performance.</soThat>
+    <tasks>
+      <task>Backend: Implement `FeedbackService.save_feedback` method (AC: 3.2.1)
+    - Define the database model for feedback in `backend/src/models/feedback.py`. This includes fields for `query`, `response`, `rating`, and `timestamp`.
+    - Implement logic to connect to PostgreSQL database.
+    - Implement logic to insert feedback data into the `feedback` table.
+    - Address the Pydantic v2 compatibility for `FeedbackDB` model (update to use `pydantic.ConfigDict`).</task>
+      <task>Backend: Integrate `FeedbackService` with `FeedbackAPI` (AC: 3.2.1)
+    - Modify `POST /feedback` endpoint in `backend/src/api/feedback.py` to call `FeedbackService.save_feedback`.</task>
+      <task>Backend: Database Migration (AC: 3.2.1)
+    - Create a database migration script to create the `feedback` table in PostgreSQL.</task>
+      <task>Backend: Ensure PII Exclusion in Logging (AC: 3.2.2)
+    - Review logging implementation in `FeedbackService` to explicitly exclude any PII from logs.
+    - Ensure `query` and `response` are handled safely (e.g., hash, truncate, or redact PII if present, though PRD states no PII is handled for MVP).</task>
+      <task>Backend Unit Tests (`backend/tests/test_feedback_service.py`): (AC: 3.2.1, 3.2.2)
+    - Test `FeedbackService.save_feedback` method, mocking database interactions.
+    - Verify correct data is stored in the mock database.
+    - Test edge cases (e.g., invalid input if validation is added in service layer).
+    - Test PII exclusion in logs.</task>
+      <task>Backend Integration Test (`backend/tests/test_feedback_api.py`): (AC: 3.2.1, 3.2.2)
+    - Extend existing `test_feedback_api.py` to test end-to-end feedback submission, including persistence to a test database.</task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <acceptanceCriterion id="AC 3.2.1">Given a feedback signal (thumbs up/down) is received from the UI, when the backend processes the signal, then it records the feedback along with the user's query, the chatbot's response, and a timestamp into a persistent log within the PostgreSQL database.</acceptanceCriterion>
+    <acceptanceCriterion id="AC 3.2.2">Given the system records feedback, then the system ensures that no personally identifiable information (PII) is persisted or logged, adhering to the project's data privacy guidelines.</acceptanceCriterion>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc path="docs/prd.md" title="Product Requirements Document" section="Functional Requirements" snippet="FR5: The user can provide feedback on the helpfulness of the chatbot's answers." />
+      <doc path="docs/prd.md" title="Product Requirements Document" section="Non-Functional Requirements / Security - Data Privacy" snippet="All user interactions and data handling shall comply with relevant data privacy regulations (e.g., GDPR, local university policies)." />
+      <doc path="docs/prd.md" title="Product Requirements Document" section="Epics Summary - Epic 3" snippet="Epic 3: User Feedback Loop - Value: Allows users to help improve the system's accuracy over time, making the chatbot more reliable and trustworthy." />
+      <doc path="docs/prd.md" title="Product Requirements Document" section="Key Interactions" snippet="Feedback Mechanism: Simple ways for users to indicate if an answer was helpful or not." />
+
+      <doc path="docs/architecture.md" title="Architecture" section="Decision Summary - Data Persistence" snippet="PostgreSQL is ideal for structured, relational course data and provides a solid foundation for future vector search capabilities." />
+      <doc path="docs/architecture.md" title="Architecture" section="Decision Summary - Logging Strategy" snippet="Python's built-in `logging` module with DEBUG, INFO, WARNING, ERROR levels. Logs to console for hosting platform collection. Focus on key events (chat requests, DB/RAG errors, LLM failures), avoiding secrets/API keys." />
+      <doc path="docs/architecture.md" title="Architecture" section="Decision Summary - Security Architecture" snippet="Dedicated DB user with minimum permissions, strong passwords, no public exposure for PostgreSQL. HTTPS for all traffic. Gemini API keys and DB credentials stored in backend environment variables. AI safety via prompt instructions and avoiding logging full prompts/answers." />
+      <doc path="docs/architecture.md" title="Architecture" section="Epic to Architecture Mapping - Story 3.2" snippet="Persist User Feedback → `backend/src/api/`, `backend/src/db/` (for feedback storage, if applicable)." />
+      <doc path="docs/architecture.md" title="Architecture" section="Technology Stack Details - Backend" snippet="Python: `3.11.14` (Recommended stable version) / `3.12.2`, FastAPI: `^0.122.0`, PostgreSQL: `^16.0`." />
+      <doc path="docs/architecture.md" title="Architecture" section="Implementation Patterns - Data Format" snippet="Dates/Times: Store and transmit as **UTC ISO-8601** strings." />
+      <doc path="docs/architecture.md" title="Architecture" section="Data Architecture" snippet="The core data architecture revolves around a PostgreSQL database. It will store structured course information, including: ... `feedback` table: (if Epic 3 is implemented) `query`, `response`, `rating` (thumbs up/down), `timestamp`." />
+
+      <doc path="docs/ux-design-specification.md" title="UX Design Specification" section="Core Experience Principles - Feedback" snippet="Feedback: Feedback should be clear and concise. A quick, well-formatted answer is the primary success feedback." />
+      <doc path="docs/ux-design-specification.md" title="UX Design Specification" section="Key Interactions" snippet="Feedback Mechanism: Simple ways for users to indicate if an answer was helpful or not." />
+      <doc path="docs/ux-design-specification.md" title="UX Design Specification" section="Design Direction - Interaction Decisions" snippet="User Control: Beyond basic input/send, the design incorporates a 'thumbs up/down' feedback mechanism next to bot responses." />
+      <doc path="docs/ux-design-specification.md" title="UX Design Specification" section="Component Library - Custom Components Needed" snippet="Feedback Icons: Interactive 'thumbs up/down' icons integrated into bot messages." />
+      <doc path="docs/ux-design-specification.md" title="UX Design Specification" section="UX Pattern Decisions - Feedback Patterns" snippet="Success: ... For positive user actions (e.g., providing feedback), a subtle `Toast` notification (using `Clear Horizon`'s success green `#4CAF50`) will provide confirmation." />
+      <doc path="docs/ux-design-specification.md" title="UX Design Specification" section="UX Pattern Decisions - Feedback Patterns" snippet="Error: For transient system errors (e.g., network issues), a non-intrusive `Toast` notification (using `Clear Horizon`'s error red `#F44336`)." />
+
+      <doc path="docs/epics.md" title="Epic Breakdown" section="Epics Summary - Epic 3" snippet="Epic 3: User Feedback Loop - Value: Allows users to help improve the system's accuracy over time, making the chatbot more reliable and trustworthy." />
+      <doc path="docs/epics.md" title="Epic Breakdown" section="Epic 3 - Story 3.2: Persist User Feedback" snippet="As a System, I want to store user feedback, so that it can be analyzed to improve the chatbot's performance. AC: Records feedback with query, response, and timestamp into a persistent log, no PII." />
+    </docs>
+    <code>
+      <code path="backend/src/models/feedback.py" kind="model" symbol="FeedbackBase" reason="Base Pydantic model for feedback data." />
+      <code path="backend/src/models/feedback.py" kind="model" symbol="FeedbackCreate" reason="Pydantic model for incoming feedback data from API." />
+      <code path="backend/src/models/feedback.py" kind="model" symbol="FeedbackDB" reason="Pydantic model for database representation of feedback, requires update for Pydantic v2 ConfigDict." />
+      <code path="backend/src/services/feedback_service.py" kind="service" symbol="FeedbackService" reason="Contains business logic for handling feedback. record_feedback method needs implementation for persistence." />
+      <code path="backend/src/api/feedback.py" kind="api" symbol="submit_feedback" reason="FastAPI endpoint for submitting feedback. Calls FeedbackService.record_feedback." />
+      <code path="backend/tests/test_feedback_api.py" kind="test" symbol="test_submit_feedback_success" reason="Integration test for /feedback endpoint. Needs modification to test actual persistence." />
+      <code path="backend/tests/test_feedback_api.py" kind="test" symbol="test_submit_feedback_invalid_rating" reason="Integration test for /feedback endpoint with invalid rating input." />
+      <code path="backend/tests/test_feedback_api.py" kind="test" symbol="test_submit_feedback_missing_field" reason="Integration test for /feedback endpoint with missing required field." />
+      <code path="backend/tests/test_feedback_api.py" kind="test" symbol="test_submit_feedback_service_exception" reason="Integration test for /feedback endpoint when service raises an exception." />
+    </code>
+        <dependencies>
+          <ecosystem name="Node.js" path="himolde-study-friend/package.json">
+            <package name="@radix-ui/react-scroll-area" version="^1.2.10" />
+            <package name="@radix-ui/react-slot" version="^1.2.4" />
+            <package name="@types/uuid" version="^10.0.0" />
+            <package name="class-variance-authority" version="^0.7.1" />
+            <package name="clsx" version="^2.1.1" />
+            <package name="lucide-react" version="^0.555.0" />
+            <package name="react" version="^19.2.0" />
+            <package name="react-dom" version="^19.2.0" />
+            <package name="tailwind-merge" version="^3.4.0" />
+            <package name="tailwindcss-animate" version="^1.0.7" />
+            <package name="uuid" version="^13.0.0" />
+            <package name="@eslint/js" version="^9.39.1" type="dev" />
+            <package name="@playwright/test" version="^1.57.0" type="dev" />
+            <package name="@tailwindcss/postcss" version="^4.1.17" type="dev" />
+            <package name="@testing-library/dom" version="^10.4.1" type="dev" />
+            <package name="@testing-library/jest-dom" version="^6.9.1" type="dev" />
+            <package name="@testing-library/react" version="^16.3.0" type="dev" />
+            <package name="@testing-library/user-event" version="^14.6.1" type="dev" />
+            <package name="@types/node" version="^24.10.1" type="dev" />
+            <package name="@types/react" version="^19.2.5" type="dev" />
+            <package name="@types/react-dom" version="^19.2.3" type="dev" />
+            <package name="@vitejs/plugin-react" version="^5.1.1" type="dev" />
+            <package name="@vitest/coverage-v8" version="^4.0.15" type="dev" />
+            <package name="autoprefixer" version="^10.4.22" type="dev" />
+            <package name="axe-core" version="^4.11.0" type="dev" />
+            <package name="eslint" version="^9.39.1" type="dev" />
+            <package name="eslint-config-prettier" version="^10.1.8" type="dev" />
+            <package name="eslint-plugin-prettier" version="^5.5.4" type="dev" />
+            <package name="eslint-plugin-react-hooks" version="^7.0.1" type="dev" />
+            <package name="eslint-plugin-react-refresh" version="^0.4.24" type="dev" />
+            <package name="globals" version="^16.5.0" type="dev" />
+            <package name="jsdom" version="^27.2.0" type="dev" />
+            <package name="postcss" version="^8.5.6" type="dev" />
+            <package name="prettier" version="^3.7.3" type="dev" />
+            <package name="tailwindcss" version="^4.1.17" type="dev" />
+            <package name="typescript" version="~5.9.3" type="dev" />
+            <package name="typescript-eslint" version="^8.46.4" type="dev" />
+            <package name="vite" version="^7.2.4" type="dev" />
+            <package name="vitest" version="^4.0.15" type="dev" />
+            <package name="vitest-axe" version="^0.1.0" type="dev" />
+          </ecosystem>
+          <ecosystem name="Python" path="backend/requirements.txt">
+            <package name="fastapi" version="==0.122.0" />
+            <package name="uvicorn" version="==0.27.0.post1" />
+            <package name="pydantic" version="==1.10.16" />
+            <package name="pytest" version="==8.0.0" />
+            <package name="pytest-mock" version="==3.15.1" />
+            <package name="pytest-asyncio" version="==0.23.5" />
+            <package name="httpx" version="==0.27.0" />
+          </ecosystem>
+        </dependencies>  </artifacts>
+
+  <constraints>
+    <constraint type="data-persistence">PostgreSQL as the chosen database for structured relational data. Feedback to be stored in a `feedback` table.</constraint>
+    <constraint type="logging-strategy">Python's built-in `logging` module to be used for backend events, ensuring PII is avoided in logs.</constraint>
+    <constraint type="security">Database access with minimum permissions; no PII in logs/feedback. Compliance with data privacy regulations.</constraint>
+    <constraint type="technical-debt">Update `FeedbackDB` in `backend/src/models/feedback.py` to use `pydantic.ConfigDict` for Pydantic v2 compatibility.</constraint>
+    <constraint type="error-handling">Consider more granular exception handling in `POST /feedback` endpoint if `FeedbackService` introduces specific custom exceptions. Backend API error responses should use non-2xx status codes with JSON `{ 'error': 'message', 'code': 'SOME_CODE' }`.</constraint>
+  </constraints>
+  <interfaces>
+    <interface name="/feedback" kind="REST endpoint" signature="POST /feedback" path="backend/src/api/feedback.py" />
+    <interface name="FeedbackService.record_feedback" kind="method signature" signature="async def record_feedback(self, feedback_data: FeedbackCreate)" path="backend/src/services/feedback_service.py" />
+  </interfaces>
+  <tests>
+    <standards>Frontend testing will use Vitest. Backend testing will use Pytest for comprehensive testing, including unit and integration tests. Tests should cover core business logic and API interactions.</standards>
+    <locations>
+      <location>himolde-study-friend/tests/</location>
+      <location>backend/tests/</location>
+    </locations>
+    <ideas>
+      <idea ac="AC 3.2.1">Test `FeedbackService.save_feedback` method with mocked database interactions, verifying correct data storage.</idea>
+      <idea ac="AC 3.2.1">Test edge cases for `FeedbackService.save_feedback` (e.g., invalid input if validation is added).</idea>
+      <idea ac="AC 3.2.1">Extend `backend/tests/test_feedback_api.py` to include end-to-end integration tests for feedback submission, ensuring persistence to a test database.</idea>
+      <idea ac="AC 3.2.2">Verify PII exclusion in logs for `FeedbackService.save_feedback` method.</idea>
+      <idea ac="AC 3.2.2">Verify PII exclusion in logs during integration tests for feedback submission.</idea>
+    </ideas>
+  </tests>
+</story-context>

@@ -16,7 +16,7 @@ Og det anbefales sterkt å bruke en gemini api key (kan fåes og brukes gratis)
     - cd sg-ki-krigerne\backend
 2. Lag og aktiver et virituelt miljø
     - python -m venv .venv
-    .venv\Scripts\activate
+    - .venv\Scripts\activate
 3. Installere python dependencies
     - pip install -r requirements.txt
 4. Konfigurere en Gemini API key (må ikke gjøres, men anbefales)
